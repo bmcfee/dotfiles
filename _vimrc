@@ -9,7 +9,7 @@ iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
         set guioptions=c
         set lines=40
         set mousehide
-        set guifont=Source\ Code\ Pro\ 9,Fixed\ 9
+        set guifont=Source\ Code\ Pro\ 10,Fixed\ 10
   else
         set t_Co=256
         colorscheme zellner

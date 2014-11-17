@@ -13,8 +13,8 @@ DARK_PURPLE="\[\033[0;35m\]"
  LIGHT_GRAY="\[\033[0;37m\]"
   DARK_GRAY="\[\033[1;30m\]"
   LIGHT_RED="\[\033[1;31m\]"
-GREEN="\[\033[1;32m\]"
-PURPLE="\[\033[0;35m\]"
+      GREEN="\[\033[1;32m\]"
+     PURPLE="\[\033[1;35m\]"
        CYAN="\[\033[1;36m\]"
       WHITE="\[\033[1;37m\]"
  COLOR_NONE="\[\e[0m\]"
@@ -49,7 +49,7 @@ function parse_git_branch {
 function test_ssh() {
 
     case "$HOSTNAME" in
-        morrison*)
+        calculon*)
             HOSTCOLOR=${PURPLE}
         ;;
         theremin*)
@@ -58,7 +58,7 @@ function test_ssh() {
         cosmal*)
             HOSTCOLOR=${YELLOW}
         ;;
-        fwgserver*)
+        login*)
             HOSTCOLOR=${GREEN}
         ;;
         porkpie*)
@@ -98,3 +98,4 @@ function prompt_func() {
 }
 
 PROMPT_COMMAND=prompt_func
+alias top=htop

@@ -99,3 +99,4 @@ function prompt_func() {
 
 PROMPT_COMMAND=prompt_func
 alias top=htop
+alias ls='ls -h -F --color=auto'

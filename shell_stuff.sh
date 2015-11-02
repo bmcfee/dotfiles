@@ -1,5 +1,8 @@
 export EDITOR="gvim -f"
-export PYTHONPATH="${PYTHONPATH}:${HOME}/lib/python"
+
+if [ -d ~/miniconda ]; then
+    . ~/miniconda/bin/activate py35
+fi
 
 if [ -f ~/.private.sh ]; then
     . ~/.private.sh

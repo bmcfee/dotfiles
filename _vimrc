@@ -17,7 +17,6 @@ else
 endif
 
 set     encoding=utf-8
-set     statusline=%<%f\ %h%w%m%r%y%=L:%l/%L\ (%p%%)\ C:%c%V\ B:%o\ F:%{foldlevel('.')} 
 set     incsearch
 set     autoindent
 set     smartindent
@@ -73,10 +72,6 @@ cnoremap <C-B> <Left>
 cnoremap <ESC>b <S-Left>
 cnoremap <ESC>f <S-Right>
 cnoremap <ESC><C-H> <C-W>
-map <F4>  :split<C-M>
-map <F5>  :bp<C-M>
-map <F6>  :bn<C-M>
-map <F12> :bd<C-M>
 map <ESC>[19~ :split<C-M>
 map <ESC>[20~ :bp<C-M>
 map <ESC>[23~ :bn<C-M>
@@ -98,26 +93,22 @@ imap <ESC>OD <Left>
 map <ESC>[D <Left>
 imap <ESC>[D <Left>
 
-map <C-C> :call EnhancedCommentify('', 'guess')<CR>
-imap <C-C> <ESC>:call EnhancedCommentify('', 'guess')<CR>i
+let mapleader=","
 
-let g:EnhCommentifyMultiPartBlocks = 'yes'
-let g:EnhCommentifyPretty = 'yes'
-let g:EnhCommentifyAlignRight = 'yes'
-let g:EnhCommentifyUseSyntax = 'yes'
+filetype plugin on
+ 
 
-let mapleader = "^C"
 
-map ,Cm <home>OCHANGED: <ESC>CYtag<ESC><C-C>o <ESC><C-C>o<ESC>k<end>gela
-map ,Cc <home>OCREATED: <ESC>CYtag<ESC><C-C>o <ESC><C-C>o<ESC>k<end>gela
-map ,Cf <home>OFIXME:   <ESC>CYtag<ESC><C-C>o <ESC><C-C>o<ESC>k<end>gela
-map ,Ct <home>OTODO:    <ESC>CYtag<ESC><C-C>o <ESC><C-C>o<ESC>k<end>gela
-map ,Cx <home>OXXX:     <ESC>CYtag<ESC><C-C>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Cc <home>OCREATED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Cf <home>OFIXME:   <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Ct <home>OTODO:    <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Cx <home>OXXX:     <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
 
-map ,s :!echo <cword> \| ispell -a <return>
-map ,d :!dict <cword> \| less <return>
-map ,m :!man <cword> <CR>
-map ,p :!pydoc <cword> <CR>
+map <leader>Cs :!echo <cword> \| ispell -a <return>
+map <leader>Cd :!dict <cword> <return>
+map <leader>Cm :!man <cword> <CR>
+map <leader>Cp :!pydoc <cword> <CR>
 
 augroup GPGASCII
 	au!

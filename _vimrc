@@ -95,7 +95,7 @@ imap <ESC>[D <Left>
 
 let mapleader=","
 
-filetype plugin on
+filetype plugin indent on
  
 
 

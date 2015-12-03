@@ -1,6 +1,7 @@
 set fish_greeting ""
 set FLINE_PATH $HOME/.config/fish/fishline
-set FLINE_PROMPT STATUS JOBS PWD VFISH GIT WRITE USERHOST N ROOT SPACE
+set FLINE_PROMPT STATUS USERHOST JOBS VFISH GIT FULLPWD WRITE N ROOT SPACE
+
 source $HOME/.config/fish/condaline.fish
 source $FLINE_PATH/fishline.fish
 
@@ -10,3 +11,4 @@ end
 
 ca py35
 
+alias top=htop

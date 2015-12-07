@@ -1,6 +1,13 @@
 set fish_greeting ""
 set FLINE_PATH $HOME/.config/fish/fishline
-set FLINE_PROMPT STATUS USERHOST JOBS VFISH GIT FULLPWD WRITE N ROOT SPACE
+
+if set -q SSH_CLIENT
+    set USERHOST USERHOST
+else
+    set USERHOST 
+end
+set FLINE_PROMPT STATUS $USERHOST JOBS VFISH GIT FULLPWD WRITE N ROOT SPACE
+
 
 source $HOME/.config/fish/condaline.fish
 source $FLINE_PATH/fishline.fish

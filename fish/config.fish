@@ -18,7 +18,7 @@ set -x PKG_CONFIG_PATH $HOME/lib/pkgconfig
 
 source $HOME/.config/fish/conda.fish
 source $HOME/.config/fish/condaline.fish
-source $FLINE_PATH/init.fish
+#source $FLINE_PATH/init.fish
 
 function fish_prompt
     fishline $status

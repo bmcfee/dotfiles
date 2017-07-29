@@ -16,6 +16,10 @@ else
 "    colorscheme zellner
     colorscheme vice
 endif
+if !has("nvim")
+    set     highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
+    set     nottybuiltin
+endif
 
 set     encoding=utf-8
 set     incsearch
@@ -26,7 +30,6 @@ set     comments=b:#,:%,fb:-,n:>,n:)
 set     expandtab
 set     helpheight=0
 set     hidden
-set     highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
 set     joinspaces
 set     laststatus=2
 set     magic
@@ -40,7 +43,6 @@ set     noesckeys
 set     noicon
 set     noignorecase
 set     noinsertmode
-set     nottybuiltin
 set     nowritebackup
 set     path=.
 set     report=0
@@ -128,3 +130,17 @@ syntax on
 source $VIMRUNTIME/syntax/syntax.vim
 syntax sync maxlines=120
 
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ['python', 'pylint', 'flake8']
+let g:syntastic_aggregate_errors = 1
+
+autocmd BufNewFile,BufRead *.tex set nolinebreak wrap textwidth=0 wrapmargin=0
+
+let g:tex_conceal = ""

@@ -3,6 +3,8 @@ iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
 
 set spell
 
+colorscheme zellner
+
 if has("gui_running")
     colorscheme desert
     set columns=120
@@ -12,9 +14,7 @@ if has("gui_running")
     "set guifont=Source\ Code\ Pro\ 10,Fixed\ 10
     set guifont=Sauce\ Code\ Powerline\ 10,Fixed\ 10
 else
-    set t_Co=256
-"    colorscheme zellner
-    colorscheme vice
+    set t_Co=8
 endif
 if !has("nvim")
     set     highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
@@ -130,15 +130,16 @@ syntax on
 source $VIMRUNTIME/syntax/syntax.vim
 syntax sync maxlines=120
 
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
+let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['python', 'pylint', 'flake8']
+"let g:syntastic_python_checkers = ['python', 'pylint', 'flake8']
+let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_aggregate_errors = 1
 
 autocmd BufNewFile,BufRead *.tex set nolinebreak wrap textwidth=0 wrapmargin=0

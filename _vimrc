@@ -13,7 +13,8 @@ if has("gui_running")
     set guifont=Sauce\ Code\ Powerline\ 10,Fixed\ 10
 else
     set t_Co=256
-    colorscheme zellner
+"    colorscheme zellner
+    colorscheme vice
 endif
 
 set     encoding=utf-8

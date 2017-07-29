@@ -46,7 +46,7 @@ function condactivate -d 'Activate a conda environment' -a cenv
   # https://github.com/conda/conda/issues/473
   set -xg CONDA_DEFAULT_ENV $cenv
 
-  set -xg VIRTUAL_ENV $CONDA_DEFAULT_ENV
+  #set -xg VIRTUAL_ENV $CONDA_DEFAULT_ENV
   # set up the prompt so it has the env name in it
   #functions -e __original_fish_prompt
   #functions -c fish_prompt __original_fish_prompt

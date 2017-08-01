@@ -4,4 +4,4 @@ attrcolor b ".I"
 termcapinfo xterm*|xs|rxvt ti@:te@
 
 defutf8 on
-utf8 on on
+utf8 on

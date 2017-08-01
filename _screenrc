@@ -2,3 +2,6 @@ term    screen-256color
 startup_message off
 attrcolor b ".I"
 termcapinfo xterm*|xs|rxvt ti@:te@
+
+defutf8 on
+utf8 on on

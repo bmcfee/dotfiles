@@ -30,4 +30,4 @@ set -x TF_CPP_MIN_LOG_LEVEL 3
 set -x EDITOR "gvim -f"
 set -x FLSYM_CONDA  "\U0001F40D "
 
-
+alias ls="ls -F --color"

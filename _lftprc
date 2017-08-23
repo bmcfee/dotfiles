@@ -1,0 +1,6 @@
+# parallel downloading
+set pget:default-n 4
+set pget:save-status 3s
+set cmd:queue-parallel 4
+set mirror:parallel-transfer-count 4
+

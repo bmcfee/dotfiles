@@ -4,7 +4,6 @@ iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
 set spell
 
 colorscheme zellner
-
 if has("gui_running")
     colorscheme desert
     set columns=120
@@ -39,7 +38,7 @@ set     noautowrite
 set     nobackup
 set     nocompatible
 set     noerrorbells
-set     noesckeys
+"set     noesckeys
 set     noicon
 set     noignorecase
 set     noinsertmode
@@ -125,23 +124,31 @@ augroup END
 
 let g:airline_powerline_fonts = 1
 
-call pathogen#infect()
+"if !has("nvim")
+    call pathogen#infect()
+"endif
+
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim
 syntax sync maxlines=120
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-"let g:syntastic_python_checkers = ['python', 'pylint', 'flake8']
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_aggregate_errors = 1
 
 autocmd BufNewFile,BufRead *.tex set nolinebreak wrap textwidth=0 wrapmargin=0
 
 let g:tex_conceal = ""
+
+function! ProseMode()
+  call goyo#execute(0, [])
+  set spell noci nosi noai nolist noshowmode noshowcmd
+  set complete+=s
+  set bg=light
+  if !has('gui_running')
+    let g:solarized_termcolors=256
+  endif
+  colors solarized
+endfunction
+
+command! ProseMode call ProseMode()
+nmap \p :ProseMode<CR>

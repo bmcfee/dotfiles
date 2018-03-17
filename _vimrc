@@ -119,6 +119,7 @@ map <leader>Cp :!pydoc <cword> <CR>
 
 let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1
+let g:indent_guides_enable_on_vim_startup = 1
 
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim
@@ -128,5 +129,8 @@ set statusline+=%#warningmsg#
 set statusline+=%*
 
 autocmd BufNewFile,BufRead *.tex set nolinebreak wrap textwidth=0 wrapmargin=0
+
+let g:indent_guides_start_level = 2
+hi IndentGuidesEven ctermbg=darkgrey
 
 let g:tex_conceal = ""

@@ -1,4 +1,4 @@
-export EDITOR="gvim -f"
+export EDITOR="vim"
 
 if [ -d ~/miniconda ]; then
     . ~/miniconda/bin/activate py35

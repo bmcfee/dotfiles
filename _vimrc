@@ -98,8 +98,6 @@ imap <ESC>[D <Left>
 let mapleader=","
 
 filetype plugin indent on
- 
-
 
 map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
 map <leader>Cc <home>OCREATED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
@@ -112,21 +110,9 @@ map <leader>Cd :!dict <cword> <return>
 map <leader>Cm :!man <cword> <CR>
 map <leader>Cp :!pydoc <cword> <CR>
 
-augroup GPGASCII
-	au!
-	au BufReadPost *.pgp,*.asc,*.gpg	:%!gpg -q -d
-	au BufReadPost *.pgp,*.asc,*.gpg	|redraw
-	au FileReadPost *.pgp,*.asc,*.gpg	|redraw
-	au BufWritePre *.pgp,*.asc,*.gpg	:%!gpg -q -e -a
-	au BufWritePost *.pgp,*.asc,*.gpg	u
-	au VimLeave *.pgp,*.asc,*.gpg		:!clear
-augroup END
-
 let g:airline_powerline_fonts = 1
 
-"if !has("nvim")
-    call pathogen#infect()
-"endif
+call pathogen#infect()
 
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim
@@ -138,17 +124,3 @@ set statusline+=%*
 autocmd BufNewFile,BufRead *.tex set nolinebreak wrap textwidth=0 wrapmargin=0
 
 let g:tex_conceal = ""
-
-function! ProseMode()
-  call goyo#execute(0, [])
-  set spell noci nosi noai nolist noshowmode noshowcmd
-  set complete+=s
-  set bg=light
-  if !has('gui_running')
-    let g:solarized_termcolors=256
-  endif
-  colors solarized
-endfunction
-
-command! ProseMode call ProseMode()
-nmap \p :ProseMode<CR>

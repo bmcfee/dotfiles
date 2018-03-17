@@ -15,8 +15,6 @@ if has("gui_running")
     set mousehide
     "set guifont=Source\ Code\ Pro\ 10,Fixed\ 10
     set guifont=Sauce\ Code\ Powerline\ 10,Fixed\ 10
-else
-    set t_Co=8
 endif
 
 if !has("nvim")
@@ -113,7 +111,7 @@ map <leader>Cd :!dict <cword> <return>
 map <leader>Cm :!man <cword> <CR>
 map <leader>Cp :!pydoc <cword> <CR>
 
-let g:airline_theme='deus'
+let g:airline_theme='base16_mocha'
 let g:airline_powerline_fonts = 1
 
 syntax on

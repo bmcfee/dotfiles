@@ -1,11 +1,14 @@
 version 6.0
 iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
 
+call pathogen#infect()
+
 set spell
 
-colorscheme zellner
+set background=dark
+
+colorscheme Base2Tone_PoolDark
 if has("gui_running")
-    colorscheme desert
     set columns=120
     set guioptions=c
     set lines=40
@@ -15,6 +18,7 @@ if has("gui_running")
 else
     set t_Co=8
 endif
+
 if !has("nvim")
     set     highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
     set     nottybuiltin
@@ -38,7 +42,6 @@ set     noautowrite
 set     nobackup
 set     nocompatible
 set     noerrorbells
-"set     noesckeys
 set     noicon
 set     noignorecase
 set     noinsertmode
@@ -111,8 +114,6 @@ map <leader>Cm :!man <cword> <CR>
 map <leader>Cp :!pydoc <cword> <CR>
 
 let g:airline_powerline_fonts = 1
-
-call pathogen#infect()
 
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim

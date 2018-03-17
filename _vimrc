@@ -134,3 +134,5 @@ let g:indent_guides_start_level = 2
 hi IndentGuidesEven ctermbg=darkgrey
 
 let g:tex_conceal = ""
+map <C-n> :NERDTreeToggle<CR>
+

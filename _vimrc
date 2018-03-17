@@ -111,7 +111,7 @@ map <leader>Cd :!dict <cword> <return>
 map <leader>Cm :!man <cword> <CR>
 map <leader>Cp :!pydoc <cword> <CR>
 
-let g:airline_theme='base16_mocha'
+let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1
 
 syntax on

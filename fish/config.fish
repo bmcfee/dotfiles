@@ -27,7 +27,7 @@ set -x LIBROSA_CACHE_DIR /tmp/librosa_cache
 set -x LIBROSA_CACHE_LEVEL 10
 
 set -x TF_CPP_MIN_LOG_LEVEL 3
-set -x EDITOR "gvim -f"
+set -x EDITOR "vim"
 set -x FLSYM_CONDA  "\U0001F40D "
 
 alias ls="ls -F --color"

@@ -22,47 +22,51 @@ if !has("nvim")
     set     nottybuiltin
 endif
 
+
+set     path=.
+set     report=0
+set     showcmd
+set     showmatch
+set     showmode
+set     softtabstop=4
+set     ttyfast
+set     t_vb=
+set     whichwrap=<,>
+set     wildchar=<TAB>
+set     wrapmargin=1
+
+set     comments=b:#,:%,fb:-,n:>,n:)
+set     shortmess=at
+
+set     smartindent
+set     magic
+set     noautowrite
+set     nobackup
+set     nocompatible
+set     noicon
+set     noinsertmode
+set     nowritebackup
 set     encoding=utf-8
 set     incsearch
 set     autoindent
-set     smartindent
 set     backspace=indent,eol,start
-set     comments=b:#,:%,fb:-,n:>,n:)
 set     expandtab
 set     helpheight=0
 set     hidden
 set     joinspaces
 set     laststatus=2
-set     magic
 set     nomodeline
 set     number
-set     noautowrite
-set     nobackup
-set     nocompatible
 set     noerrorbells
-set     noicon
 set     noignorecase
-set     noinsertmode
-set     nowritebackup
-set     path=.
-set     report=0
 set     ruler
-set     shell=bash
+set     shell=fish
 set     shiftwidth=4
-set     shortmess=at
-set     showcmd
-set     showmatch
-set     showmode
-set     softtabstop=4
 set     suffixes=.bak.swp
 set     tabstop=4
 set     title
-set     ttyfast
 set     visualbell
-set     t_vb=
-set     whichwrap=<,>
-set     wildchar=<TAB>
-set     wrapmargin=1
+
 nmap    Q gq
 vmap    Q gq
 map     K <C-V>
@@ -96,6 +100,8 @@ imap <ESC>OD <Left>
 map <ESC>[D <Left>
 imap <ESC>[D <Left>
 
+"nmap <F8> :TagbarToggle<CR>
+nmap <C-W>t :TagbarToggle<CR>
 let mapleader=","
 
 filetype plugin indent on

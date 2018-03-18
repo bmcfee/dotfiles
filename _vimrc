@@ -117,7 +117,10 @@ map <leader>Cd :!dict <cword> <return>
 map <leader>Cm :!man <cword> <CR>
 map <leader>Cp :!pydoc <cword> <CR>
 
-let g:airline_theme='Base2Tone_PoolDark'
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1
 let g:indent_guides_enable_on_vim_startup = 1
 

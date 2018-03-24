@@ -102,6 +102,7 @@ imap <ESC>[D <Left>
 
 "nmap <F8> :TagbarToggle<CR>
 nmap <C-W>t :TagbarToggle<CR>
+
 let mapleader=","
 
 filetype plugin indent on
@@ -123,6 +124,10 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1
 let g:indent_guides_enable_on_vim_startup = 1
+
+let g:vimtex_compiler_progname='latexmk'
+let g:vimtex_view_method='zathura'
+let g:tex_flavor='latex'
 
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim

@@ -1,7 +1,22 @@
 version 6.0
 iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
 
-call pathogen#infect()
+set     nocompatible
+set 	rtp+=~/.config/nvim/bundle/Vundle.vim
+call vundle#begin()
+    Plugin 'VundleVim/Vundle.vim'
+    Plugin 'w0rp/ale'
+    Plugin 'vim-airline/vim-airline'
+    Plugin 'vim-airline/vim-airline-themes'
+    Plugin 'atelierbram/Base2Tone-vim'
+    Plugin 'kien/ctrlp'
+    Plugin 'lervag/vimtex'
+    Plugin 'dag/vim-fish'
+    Plugin 'majutsushi/tagbar'
+    Plugin 'scrooloose/nerdtree'
+call vundle#end()
+
+filetype plugin indent on
 
 set spell
 
@@ -42,7 +57,6 @@ set     smartindent
 set     magic
 set     noautowrite
 set     nobackup
-set     nocompatible
 set     noicon
 set     noinsertmode
 set     nowritebackup

@@ -8,7 +8,7 @@ else
 end
 set FLINE_PROMPT STATUS $USERHOST SCREEN JOBS CONDA GIT FULLPWD WRITE N ROOT SPACE
 
-
+set -gx PATH $HOME/miniconda3/bin $PATH
 set -x PKG_CONFIG_PATH $HOME/lib/pkgconfig
 
 source $HOME/.config/fish/condaline.fish
@@ -17,7 +17,7 @@ function fish_prompt
     fishline $status
 end
 
-ca py35
+ca py37
 
 set -x TF_CPP_MIN_LOG_LEVEL 3
 
@@ -27,7 +27,7 @@ set -x LIBROSA_CACHE_DIR /tmp/librosa_cache
 set -x LIBROSA_CACHE_LEVEL 10
 
 set -x TF_CPP_MIN_LOG_LEVEL 3
-set -x EDITOR "vim"
+set -x EDITOR "nvim"
 set -x FLSYM_CONDA  "\U0001F40D "
 
 alias ls="ls -F --color"

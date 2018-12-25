@@ -9,7 +9,7 @@ call vundle#begin()
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'atelierbram/Base2Tone-vim'
-    Plugin 'kien/ctrlp'
+    Plugin 'kien/ctrlp.vim'
     Plugin 'lervag/vimtex'
     Plugin 'dag/vim-fish'
     Plugin 'majutsushi/tagbar'
@@ -80,6 +80,8 @@ set     suffixes=.bak.swp
 set     tabstop=4
 set     title
 set     visualbell
+set     mouse=a
+set     foldmethod=indent
 
 nmap    Q gq
 vmap    Q gq
@@ -142,6 +144,7 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:vimtex_compiler_progname='latexmk'
 let g:vimtex_view_method='zathura'
 let g:tex_flavor='latex'
+let g:vimtex_compiler_progname='nvr'
 
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim

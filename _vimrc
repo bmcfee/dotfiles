@@ -14,6 +14,8 @@ call vundle#begin()
     Plugin 'dag/vim-fish'
     Plugin 'majutsushi/tagbar'
     Plugin 'scrooloose/nerdtree'
+    Plugin 'Shougo/deoplete.nvim'
+    Plugin 'zchee/deoplete-jedi'
 call vundle#end()
 
 filetype plugin indent on
@@ -74,7 +76,7 @@ set     number
 set     noerrorbells
 set     noignorecase
 set     ruler
-set     shell=fish
+set     shell=bash
 set     shiftwidth=4
 set     suffixes=.bak.swp
 set     tabstop=4
@@ -160,4 +162,5 @@ hi IndentGuidesEven ctermbg=darkgrey
 
 let g:tex_conceal = ""
 map <C-n> :NERDTreeToggle<CR>
+let g:deoplete#enable_at_startup = 1
 

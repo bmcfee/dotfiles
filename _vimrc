@@ -9,13 +9,14 @@ call vundle#begin()
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'atelierbram/Base2Tone-vim'
-    Plugin 'kien/ctrlp.vim'
+    Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'lervag/vimtex'
     Plugin 'dag/vim-fish'
     Plugin 'majutsushi/tagbar'
     Plugin 'scrooloose/nerdtree'
     Plugin 'Shougo/deoplete.nvim'
     Plugin 'zchee/deoplete-jedi'
+    Plugin 'ryanoasis/vim-devicons'
 call vundle#end()
 
 filetype plugin indent on

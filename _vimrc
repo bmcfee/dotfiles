@@ -20,6 +20,7 @@ call vundle#begin()
     Plugin 'junegunn/limelight.vim'
     Plugin 'junegunn/goyo.vim'
     Plugin 'mhinz/vim-signify'
+    Plugin 'elzr/vim-json'
 call vundle#end()
 
 filetype plugin indent on
@@ -160,6 +161,7 @@ set statusline+=%#warningmsg#
 set statusline+=%*
 
 autocmd BufNewFile,BufRead *.tex set nolinebreak wrap textwidth=0 wrapmargin=0
+autocmd BufNewFile,BufRead *.jams set syntax=json
 
 let g:indent_guides_start_level = 2
 hi IndentGuidesEven ctermbg=darkgrey
@@ -194,9 +196,6 @@ endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-
-
-"autocmd! User GoyoEnter Limelight
-"autocmd! User GoyoLeave Limelight!
 nmap <C-W>g :Goyo<CR>
+let g:vim_json_syntax_conceal = 0
 

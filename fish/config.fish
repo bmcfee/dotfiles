@@ -30,4 +30,6 @@ set -x TF_CPP_MIN_LOG_LEVEL 3
 set -x EDITOR "nvim"
 set -x FLSYM_CONDA  "\U0001F40D "
 
+source ~/.local/share/icons-in-terminal/icons.fish
+
 alias ls="ls -F --color"

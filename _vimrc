@@ -21,6 +21,7 @@ call vundle#begin()
     Plugin 'junegunn/goyo.vim'
     Plugin 'mhinz/vim-signify'
     Plugin 'elzr/vim-json'
+    Plugin 'amix/vim-zenroom2'
 call vundle#end()
 
 filetype plugin indent on
@@ -160,7 +161,7 @@ syntax sync maxlines=120
 set statusline+=%#warningmsg#
 set statusline+=%*
 
-autocmd BufNewFile,BufRead *.tex set nolinebreak wrap textwidth=0 wrapmargin=0
+autocmd BufNewFile,BufRead *.tex,*.txt set nolinebreak wrap textwidth=0 wrapmargin=0
 autocmd BufNewFile,BufRead *.jams set syntax=json
 
 let g:indent_guides_start_level = 2

@@ -9,7 +9,6 @@ call vundle#begin()
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'atelierbram/Base2Tone-vim'
-    Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'lervag/vimtex'
     Plugin 'dag/vim-fish'
     Plugin 'majutsushi/tagbar'
@@ -19,9 +18,12 @@ call vundle#begin()
     Plugin 'ryanoasis/vim-devicons'
     Plugin 'junegunn/limelight.vim'
     Plugin 'junegunn/goyo.vim'
+    Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plugin 'junegunn/fzf.vim'
     Plugin 'mhinz/vim-signify'
     Plugin 'elzr/vim-json'
     Plugin 'amix/vim-zenroom2'
+    Plugin 'mhinz/vim-startify'
 call vundle#end()
 
 filetype plugin indent on
@@ -126,6 +128,7 @@ imap <ESC>[D <Left>
 
 "nmap <F8> :TagbarToggle<CR>
 nmap <C-W>t :TagbarToggle<CR>
+nmap <C-P> :Files<CR>
 
 let mapleader=","
 
@@ -177,6 +180,10 @@ let g:limelight_conceal_ctermfg = 240
 function! s:goyo_enter()
   "silent !tmux set status off
   "silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  let b:quitting = 0
+  let b:quitting_bang = 0
+  autocmd QuitPre <buffer> let b:quitting = 1
+  cabbrev <buffer> q! let b:quitting_bang = 1 <bar> q!
   set noshowmode
   set noshowcmd
   set scrolloff=999
@@ -195,6 +202,14 @@ function! s:goyo_leave()
   set background=dark
   colorscheme Base2Tone_PoolDark
   Limelight!
+  " Quit Vim if this is the only remaining buffer
+  if b:quitting && len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
+    if b:quitting_bang
+      qa!
+    else
+      qa
+    endif
+  endif
   " ...
 endfunction
 
@@ -205,3 +220,21 @@ let g:goyo_width="80%"
 nmap <C-W>g :Goyo<CR>
 let g:vim_json_syntax_conceal = 0
 
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_layout = { 'down': '~40%' }
+
+" In Neovim, you can set up fzf window using a Vim command
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+let g:fzf_layout = { 'window': '10split enew' }
+
+
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+autocmd VimEnter *
+            \   if !argc()
+            \ |   Startify
+            \ |   NERDTree
+            \ |   wincmd w
+            \ | endif

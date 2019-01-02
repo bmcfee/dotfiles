@@ -175,21 +175,25 @@ let g:limelight_conceal_ctermfg = 'gray'
 let g:limelight_conceal_ctermfg = 240
 
 function! s:goyo_enter()
-  silent !tmux set status off
-  silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  "silent !tmux set status off
+  "silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
   set noshowmode
   set noshowcmd
   set scrolloff=999
+  set background=light
+  colorscheme Base2Tone_SpaceLight
   Limelight
   " ...
 endfunction
 
 function! s:goyo_leave()
-  silent !tmux set status on
-  silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
+  "silent !tmux set status on
+  "silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
   set showmode
   set showcmd
   set scrolloff=5
+  set background=dark
+  colorscheme Base2Tone_PoolDark
   Limelight!
   " ...
 endfunction
@@ -197,6 +201,7 @@ endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
+let g:goyo_width="80%"
 nmap <C-W>g :Goyo<CR>
 let g:vim_json_syntax_conceal = 0
 

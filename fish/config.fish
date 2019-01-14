@@ -17,7 +17,7 @@ function fish_prompt
     fishline $status
 end
 
-ca py37
+ca py36
 
 set -x TF_CPP_MIN_LOG_LEVEL 3
 

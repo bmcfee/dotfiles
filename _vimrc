@@ -13,13 +13,9 @@ call vundle#begin()
     Plugin 'dag/vim-fish'
     Plugin 'majutsushi/tagbar'
     Plugin 'scrooloose/nerdtree'
-    Plugin 'Shougo/deoplete.nvim'
-    Plugin 'zchee/deoplete-jedi'
     Plugin 'ryanoasis/vim-devicons'
     Plugin 'junegunn/limelight.vim'
     Plugin 'junegunn/goyo.vim'
-    Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-    Plugin 'junegunn/fzf.vim'
     Plugin 'mhinz/vim-signify'
     Plugin 'elzr/vim-json'
     Plugin 'amix/vim-zenroom2'
@@ -156,6 +152,9 @@ let g:vimtex_compiler_progname='latexmk'
 let g:vimtex_view_method='zathura'
 let g:tex_flavor='latex'
 let g:vimtex_compiler_progname='nvr'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:text_conceal='adbmg'
 
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim
@@ -172,7 +171,11 @@ hi IndentGuidesEven ctermbg=darkgrey
 
 let g:tex_conceal = ""
 map <C-n> :NERDTreeToggle<CR>
-let g:deoplete#enable_at_startup = 1
+"let g:deoplete#enable_at_startup = 1
+" Disable the candidates in Comment/String syntaxes.
+"call deoplete#custom#source('_',
+"            \ 'disabled_syntaxes', ['Comment', 'String'])
+
 
 let g:limelight_conceal_ctermfg = 'gray'
 let g:limelight_conceal_ctermfg = 240

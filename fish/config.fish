@@ -8,7 +8,7 @@ else
 end
 set FLINE_PROMPT STATUS $USERHOST SCREEN JOBS CONDA GIT FULLPWD WRITE N ROOT SPACE
 
-set -gx PATH $HOME/miniconda3/bin $PATH
+set -gx PATH $HOME/.gem/ruby/2.5.0/bin $HOME/miniconda3/bin $PATH
 set -x PKG_CONFIG_PATH $HOME/lib/pkgconfig
 
 source $HOME/.config/fish/condaline.fish
@@ -17,7 +17,7 @@ function fish_prompt
     fishline $status
 end
 
-ca py36
+ca py37
 
 set -x TF_CPP_MIN_LOG_LEVEL 3
 

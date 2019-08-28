@@ -14,8 +14,6 @@ call vundle#begin()
     Plugin 'majutsushi/tagbar'
     Plugin 'scrooloose/nerdtree'
     Plugin 'ryanoasis/vim-devicons'
-    Plugin 'junegunn/limelight.vim'
-    Plugin 'junegunn/goyo.vim'
     Plugin 'mhinz/vim-signify'
     Plugin 'elzr/vim-json'
     Plugin 'amix/vim-zenroom2'
@@ -171,71 +169,8 @@ hi IndentGuidesEven ctermbg=darkgrey
 
 let g:tex_conceal = ""
 map <C-n> :NERDTreeToggle<CR>
-"let g:deoplete#enable_at_startup = 1
-" Disable the candidates in Comment/String syntaxes.
-"call deoplete#custom#source('_',
-"            \ 'disabled_syntaxes', ['Comment', 'String'])
-
-
-let g:limelight_conceal_ctermfg = 'gray'
-let g:limelight_conceal_ctermfg = 240
-
-function! s:goyo_enter()
-  "silent !tmux set status off
-  "silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
-  let b:quitting = 0
-  let b:quitting_bang = 0
-  autocmd QuitPre <buffer> let b:quitting = 1
-  cabbrev <buffer> q! let b:quitting_bang = 1 <bar> q!
-  set noshowmode
-  set noshowcmd
-  set scrolloff=999
-  set background=light
-  colorscheme Base2Tone_SpaceLight
-  Limelight
-  " ...
-endfunction
-
-function! s:goyo_leave()
-  "silent !tmux set status on
-  "silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
-  set showmode
-  set showcmd
-  set scrolloff=5
-  set background=dark
-  colorscheme Base2Tone_PoolDark
-  Limelight!
-  " Quit Vim if this is the only remaining buffer
-  if b:quitting && len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
-    if b:quitting_bang
-      qa!
-    else
-      qa
-    endif
-  endif
-  " ...
-endfunction
-
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-let g:goyo_width="80%"
-nmap <C-W>g :Goyo<CR>
-let g:vim_json_syntax_conceal = 0
-
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-let g:fzf_layout = { 'down': '~40%' }
-
-" In Neovim, you can set up fzf window using a Vim command
-let g:fzf_layout = { 'window': 'enew' }
-let g:fzf_layout = { 'window': '-tabnew' }
-let g:fzf_layout = { 'window': '10split enew' }
-
 
 let g:startify_fortune_use_unicode = 1
-
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 autocmd VimEnter *
             \   if !argc()

@@ -8,7 +8,6 @@ call vundle#begin()
     Plugin 'w0rp/ale'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
-    Plugin 'atelierbram/Base2Tone-vim'
     Plugin 'lervag/vimtex'
     Plugin 'dag/vim-fish'
     Plugin 'majutsushi/tagbar'
@@ -16,25 +15,15 @@ call vundle#begin()
     Plugin 'ryanoasis/vim-devicons'
     Plugin 'mhinz/vim-signify'
     Plugin 'elzr/vim-json'
-    Plugin 'amix/vim-zenroom2'
     Plugin 'mhinz/vim-startify'
+    Plugin 'joshdick/onedark.vim'
 call vundle#end()
 
 filetype plugin indent on
 
 set spell
-
 set background=dark
-
-colorscheme Base2Tone_PoolDark
-if has("gui_running")
-    set columns=120
-    set guioptions=c
-    set lines=40
-    set mousehide
-    "set guifont=Source\ Code\ Pro\ 10,Fixed\ 10
-    set guifont=Sauce\ Code\ Powerline\ 10,Fixed\ 10
-endif
+colorscheme onedark
 
 if !has("nvim")
     set     highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
@@ -120,9 +109,7 @@ imap <ESC>OD <Left>
 map <ESC>[D <Left>
 imap <ESC>[D <Left>
 
-"nmap <F8> :TagbarToggle<CR>
 nmap <C-W>t :TagbarToggle<CR>
-nmap <C-P> :Files<CR>
 
 let mapleader=","
 
@@ -142,7 +129,7 @@ map <leader>Cp :!pydoc <cword> <CR>
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
-let g:airline_theme='bubblegum'
+let g:airline_theme='onedark'
 let g:airline_powerline_fonts = 1
 let g:indent_guides_enable_on_vim_startup = 1
 

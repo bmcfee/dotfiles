@@ -12,6 +12,7 @@ set -gx PATH $HOME/.gem/ruby/2.5.0/bin $HOME/miniconda3/bin $PATH
 set -x PKG_CONFIG_PATH $HOME/lib/pkgconfig
 
 source $HOME/.config/fish/condaline.fish
+source $FLINE_PATH/themes/washed.fish
 
 function fish_prompt
     fishline $status

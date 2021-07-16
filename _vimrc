@@ -18,6 +18,8 @@ call vundle#begin()
     Plugin 'mhinz/vim-startify'
     Plugin 'rakr/vim-one'
     Plugin 'Yggdroot/indentLine'
+    Plugin 'tmhedberg/SimpylFold'
+    Plugin 'Konfekt/FastFold'
 call vundle#end()
 
 filetype plugin indent on
@@ -177,12 +179,14 @@ let g:tex_conceal = ""
 map <C-n> :NERDTreeToggle<CR>
 
 let g:startify_fortune_use_unicode = 1
+let g:SimpylFold_docstring_preview = 1
 
 autocmd VimEnter *
             \   if !argc()
             \ |   Startify
-            \ |   NERDTree
-            \ |   wincmd w
+"            \ |   NERDTree
+"            \ |   wincmd w
             \ | endif
 
 let g:indentLine_char = '│'
+

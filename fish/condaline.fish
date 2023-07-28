@@ -1,5 +1,5 @@
 function condalist -d 'List conda environments.'
-  for dir in (ls $HOME/miniconda/envs)
+  for dir in (ls --color=never --indicator-style=none $HOME/miniconda*/envs)
     echo $dir
   end
 end

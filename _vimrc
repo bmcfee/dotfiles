@@ -42,10 +42,10 @@ if (empty($TMUX))
 endif
 
 set spell
-"set background=dark
-"colorscheme one
-set background=light
+set background=dark
 colorscheme one
+"set background=light
+"colorscheme one
 
 if !has("nvim")
     set     highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws

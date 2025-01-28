@@ -17,9 +17,15 @@ call vundle#begin()
     Plugin 'elzr/vim-json'
     Plugin 'mhinz/vim-startify'
     Plugin 'rakr/vim-one'
+    Plugin 'folke/tokyonight.nvim'
+    Plugin 'catppuccin/nvim'
     Plugin 'Yggdroot/indentLine'
     Plugin 'tmhedberg/SimpylFold'
     Plugin 'Konfekt/FastFold'
+    Plugin 'nvim-lua/plenary.nvim'
+    Plugin 'nvim-telescope/telescope.nvim'
+    Plugin 'epwalsh/obsidian.nvim'
+    Plugin 'github/copilot.vim'
 call vundle#end()
 
 filetype plugin indent on
@@ -43,9 +49,9 @@ endif
 
 set spell
 set background=dark
-colorscheme one
 "set background=light
 "colorscheme one
+colorscheme tokyonight
 
 if !has("nvim")
     set     highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
@@ -152,7 +158,8 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 "let g:airline_theme='onedark'
-let g:airline_theme='one'
+"let g:airline_theme='one'
+let g:airline_theme='catppuccin'
 let g:airline_powerline_fonts = 1
 let g:indent_guides_enable_on_vim_startup = 1
 
@@ -171,9 +178,45 @@ let g:tex_flavor='latex'
 let g:vimtex_compiler_progname='nvr'
 let g:vimtex_quickfix_mode=0
 set conceallevel=0
+
+let g:copilot_filetypes = {
+    \ '*': v:false,
+    \ 'python': v:true,
+    \ 'c': v:true,
+    \ 'cpp': v:true,
+    \ 'java': v:true,
+    \ 'javascript': v:true,
+    \ 'typescript': v:true,
+    \ 'sh': v:true,
+    \ 'bash': v:true,
+    \ 'zsh': v:true,
+    \ 'fish': v:true,
+    \ 'go': v:true,
+    \ 'rust': v:true,
+    \ 'ruby': v:true,
+    \ 'perl': v:true,
+    \ 'php': v:true,
+    \ 'lua': v:true,
+    \ 'haskell': v:true,
+    \ 'scala': v:true,
+    \ 'swift': v:true,
+    \ 'kotlin': v:true,
+    \ 'r': v:true,
+    \ 'julia': v:true,
+    \ 'racket': v:true,
+    \ 'clojure': v:true,
+    \ 'scheme': v:true,
+    \ 'ocaml': v:true,
+    \ 'fsharp': v:true,
+    \ 'elixir': v:true,
+    \ 'erlang': v:true,
+    \ }
+
 "let g:text_conceal='ags'
 let g:ale_virtualtext_cursor=0
-
+let g:ale_linters = {
+\   'python': ['ruff', 'mypy', 'pycodestyle'],
+\}
 syntax on
 source $VIMRUNTIME/syntax/syntax.vim
 syntax sync maxlines=120
@@ -181,8 +224,9 @@ syntax sync maxlines=120
 set statusline+=%#warningmsg#
 set statusline+=%*
 
-autocmd BufNewFile,BufRead *.tex,*.txt set nolinebreak wrap textwidth=0 wrapmargin=0
+autocmd BufNewFile,BufRead *.tex,*.txt set nolinebreak wrap textwidth=0 wrapmargin=0 conceallevel=0
 autocmd BufNewFile,BufRead *.jams set syntax=json
+autocmd BufNewFile,BufRead *.json set conceallevel=0
 
 let g:indent_guides_start_level = 2
 hi IndentGuidesEven ctermbg=darkgrey

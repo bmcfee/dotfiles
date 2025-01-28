@@ -1,0 +1,296 @@
+--------------------------------------------------------------------------------
+-- init.lua - Modernized Neovim Config
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- 0. Prelim: iabbreviation for "Ytag" (same as in your init.vim)
+--------------------------------------------------------------------------------
+vim.cmd [[
+  iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
+]]
+
+--------------------------------------------------------------------------------
+-- 1. Basic Settings
+--------------------------------------------------------------------------------
+-- Force conceallevel=0
+vim.opt.conceallevel = 0
+
+-- Standard settings
+vim.opt.number         = true
+vim.opt.mouse          = "a"
+vim.opt.backspace      = { "indent", "eol", "start" }
+vim.opt.encoding       = "utf-8"
+vim.opt.termguicolors  = true
+vim.opt.autoindent     = true
+vim.opt.smartindent    = true
+vim.opt.expandtab      = true
+vim.opt.shiftwidth     = 4
+vim.opt.softtabstop    = 4
+vim.opt.tabstop        = 4
+vim.opt.wrap           = false
+vim.opt.incsearch      = true
+vim.opt.ignorecase     = false  -- 'noignorecase'
+vim.opt.title          = true
+vim.opt.laststatus     = 2
+vim.opt.showmatch      = true
+vim.opt.report         = 0
+vim.opt.shortmess      = "at"
+vim.opt.magic          = true
+vim.opt.hidden         = true
+vim.opt.visualbell     = true
+vim.opt.foldmethod     = "indent"
+vim.opt.background     = "dark"
+vim.opt.spell          = true
+
+--------------------------------------------------------------------------------
+-- 2. lazy.nvim Bootstrap
+--------------------------------------------------------------------------------
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+--------------------------------------------------------------------------------
+-- 3. Plugin Setup via lazy.nvim
+--------------------------------------------------------------------------------
+require("lazy").setup({
+  -- ALE: Asynchronous Linting
+  { "w0rp/ale" },
+
+  -- Airline + themes
+  {
+    "vim-airline/vim-airline",
+    config = function()
+      vim.g.airline_powerline_fonts = 1
+      -- any other airline config
+    end
+  },
+  {
+    "vim-airline/vim-airline-themes",
+    dependencies = { "vim-airline/vim-airline" },
+  },
+
+  -- vimtex for LaTeX
+  { "lervag/vimtex" },
+
+  -- Fish syntax
+  { "dag/vim-fish" },
+
+  -- Tagbar
+  { "majutsushi/tagbar" },
+
+  -- NERDTree
+  { "scrooloose/nerdtree" },
+
+  -- Devicons
+  { "ryanoasis/vim-devicons" },
+
+  -- vim-signify
+  { "mhinz/vim-signify" },
+
+  -- JSON
+  { "elzr/vim-json" },
+
+  -- Startify
+  { "mhinz/vim-startify" },
+
+  -- Some color schemes
+  { "rakr/vim-one" },
+  { "folke/tokyonight.nvim" },
+  { "catppuccin/nvim", name = "catppuccin" },
+
+  -- Indent guides
+  { "Yggdroot/indentLine" },
+
+  -- Python folding + fast folding
+  { "tmhedberg/SimpylFold" },
+  { "Konfekt/FastFold" },
+
+  -- telescope
+  { "nvim-lua/plenary.nvim" },
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
+  -- Obsidian plugin
+  { "epwalsh/obsidian.nvim" },
+
+  -- GitHub Copilot
+  { "github/copilot.vim" },
+})
+
+--------------------------------------------------------------------------------
+-- 4. Now set your colorscheme AFTER the plugins are available
+--------------------------------------------------------------------------------
+vim.cmd("colorscheme catppuccin")
+
+--------------------------------------------------------------------------------
+-- 5. Post-Plugin (Configs, Keymaps, Vars, etc.)
+--------------------------------------------------------------------------------
+
+-- Airline
+vim.g.airline_theme           = "catppuccin"
+vim.g.airline_powerline_fonts = 1
+
+-- IndentLine
+vim.g.indentLine_char              = "│"
+vim.g.indent_guides_start_level    = 2
+
+-- ALE
+vim.g.ale_virtualtext_cursor       = 0
+vim.g.ale_linters = {
+  python = { "ruff", "mypy", "pycodestyle" },
+}
+
+-- Copilot
+vim.g.copilot_filetypes = {
+  ["*"] = false,
+  python     = true,
+  c          = true,
+  cpp        = true,
+  java       = true,
+  javascript = true,
+  typescript = true,
+  sh         = true,
+  bash       = true,
+  zsh        = true,
+  fish       = true,
+  go         = true,
+  rust       = true,
+  ruby       = true,
+  perl       = true,
+  php        = true,
+  lua        = true,
+  haskell    = true,
+  scala      = true,
+  swift      = true,
+  kotlin     = true,
+  r          = true,
+  julia      = true,
+  racket     = true,
+  clojure    = true,
+  scheme     = true,
+  ocaml      = true,
+  fsharp     = true,
+  elixir     = true,
+  erlang     = true,
+}
+
+-- vimtex
+vim.g.vimtex_compiler_progname = "nvr"
+vim.g.vimtex_quickfix_mode     = 0
+vim.g.vimtex_view_method       = "zathura"
+vim.g.tex_flavor               = "latex"
+
+--------------------------------------------------------------------------------
+-- 6. Autocmds (migrating your old ones)
+--------------------------------------------------------------------------------
+local augroup = vim.api.nvim_create_augroup("UserAutocmds", { clear = true })
+
+-- For .tex, .txt => ensure no linebreak, wrap, conceal=0, etc.
+vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
+  group = augroup,
+  pattern = {"*.tex", "*.txt"},
+  callback = function()
+    vim.opt_local.linebreak = false
+    vim.opt_local.wrap = true
+    vim.opt_local.textwidth = 0
+    vim.opt_local.wrapmargin = 0
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
+-- JSON-related
+vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
+  group = augroup,
+  pattern = "*.jams",
+  command = "set syntax=json",
+})
+vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
+  group = augroup,
+  pattern = "*.json",
+  callback = function()
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
+-- Startify on empty invocation
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = augroup,
+  callback = function()
+    if vim.fn.argc() == 0 then
+      vim.cmd("Startify")
+    end
+  end,
+})
+
+--------------------------------------------------------------------------------
+-- 7. Keymaps (migrating your old mappings)
+--------------------------------------------------------------------------------
+vim.cmd [[
+  nmap Q gq
+  vmap Q gq
+  map K <C-V>
+  noremap <C-^> <C-^>`"
+  map :alias map
+  map :which map
+  cnoremap <C-A> <Home>
+  cnoremap <C-F> <Right>
+  cnoremap <C-B> <Left>
+  cnoremap <ESC>b <S-Left>
+  cnoremap <ESC>f <S-Right>
+  cnoremap <ESC><C-H> <C-W>
+  map <ESC>[19~ :split<CR>
+  map <ESC>[20~ :bp<CR>
+  map <ESC>[23~ :bn<CR>
+  map <ESC>[31~ :bd<CR>
+
+  " Arrow key fixes in some terminals
+  map <ESC>OA <Up>
+  imap <ESC>OA <Up>
+  map <ESC>[A <Up>
+  imap <ESC>[A <Up>
+  map <ESC>OB <Down>
+  imap <ESC>OB <Down>
+  map <ESC>[B <Down>
+  imap <ESC>[B <Down>
+  map <ESC>OC <Right>
+  imap <ESC>OC <Right>
+  map <ESC>[C <Right>
+  imap <ESC>[C <Right>
+  map <ESC>OD <Left>
+  imap <ESC>OD <Left>
+  map <ESC>[D <Left>
+  imap <ESC>[D <Left>
+
+  " Tagbar
+  nmap <C-W>t :TagbarToggle<CR>
+
+  let mapleader=","
+
+  " Insert-changelog mappings
+  map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+  map <leader>Cc <home>OCREATED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+  map <leader>Cf <home>OFIXME:   <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+  map <leader>Ct <home>OTODO:    <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+  map <leader>Cx <home>OXXX:     <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+
+  map <leader>Cs :!echo <cword> \| ispell -a <CR>
+  map <leader>Cd :!dict <cword> <CR>
+  map <leader>Cm :!man <cword> <CR>
+  map <leader>Cp :!pydoc <cword> <CR>
+
+  " ALE next/previous lint
+  nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+  nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+  " NERDTree
+  map <C-n> :NERDTreeToggle<CR>
+]]

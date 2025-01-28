@@ -15,7 +15,8 @@ set -x MAMBA_NO_BANNER 1
 
 # source $HOME/.config/fish/condaline.fish
 #source $HOME/.config/fish/conf.d/dracula.fish
-source $HOME/.config/fish/conf.d/bauhaus.fish
+#source $HOME/.config/fish/conf.d/bauhaus.fish
+source $HOME/.config/fish/themes/tokyonight_moon.fish
 #source $FLINE_PATH/themes/washed.fish
 
 function fish_prompt
@@ -28,6 +29,7 @@ set -x TF_CPP_MIN_LOG_LEVEL 3
 
 alias top=btop
 alias vim=nvim
+#alias ls="lsd --group-dirs first"
 
 set -x LIBROSA_CACHE_DIR /tmp/librosa_cache
 set -x LIBROSA_CACHE_LEVEL 10

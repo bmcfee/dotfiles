@@ -1,49 +1,12 @@
 --------------------------------------------------------------------------------
--- init.lua - Modernized Neovim Config
+--                              init.lua
+--   A single-file modern Neovim config using lazy.nvim package manager.
+--   Below, you'll see replacements for older plugins and features,
+--   with comments explaining how to use the new ones or noting outdated choices.
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
--- 0. Prelim: iabbreviation for "Ytag" (same as in your init.vim)
---------------------------------------------------------------------------------
-vim.cmd [[
-  iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
-]]
-
---------------------------------------------------------------------------------
--- 1. Basic Settings
---------------------------------------------------------------------------------
--- Force conceallevel=0
-vim.opt.conceallevel = 0
-
--- Standard settings
-vim.opt.number         = true
-vim.opt.mouse          = "a"
-vim.opt.backspace      = { "indent", "eol", "start" }
-vim.opt.encoding       = "utf-8"
-vim.opt.termguicolors  = true
-vim.opt.autoindent     = true
-vim.opt.smartindent    = true
-vim.opt.expandtab      = true
-vim.opt.shiftwidth     = 4
-vim.opt.softtabstop    = 4
-vim.opt.tabstop        = 4
-vim.opt.wrap           = false
-vim.opt.incsearch      = true
-vim.opt.ignorecase     = false  -- 'noignorecase'
-vim.opt.title          = true
-vim.opt.laststatus     = 2
-vim.opt.showmatch      = true
-vim.opt.report         = 0
-vim.opt.shortmess      = "at"
-vim.opt.magic          = true
-vim.opt.hidden         = true
-vim.opt.visualbell     = true
-vim.opt.foldmethod     = "indent"
-vim.opt.background     = "dark"
-vim.opt.spell          = true
-
---------------------------------------------------------------------------------
--- 2. lazy.nvim Bootstrap
+-- [0] Bootstrapping lazy.nvim (modern plugin manager)
 --------------------------------------------------------------------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -57,100 +20,276 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 --------------------------------------------------------------------------------
--- 3. Plugin Setup via lazy.nvim
+-- [1] lazy.nvim Setup: Plugin Definitions
 --------------------------------------------------------------------------------
 require("lazy").setup({
-  -- ALE: Asynchronous Linting
-  { "w0rp/ale" },
 
-  -- Airline + themes
+  ------------------------------------------------------------------------------
+  -- REPLACED: w0rp/ale => Built-in LSP + Mason + Null-ls for lint/format
+  -- Usage: after installing, language servers can be managed by :Mason
+  --        then configured in this file's lspconfig section.
+  ------------------------------------------------------------------------------
   {
-    "vim-airline/vim-airline",
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
     config = function()
-      vim.g.airline_powerline_fonts = 1
-      -- any other airline config
+      require("mason").setup()
+      require("mason-lspconfig").setup()
+
+      -- Example: automatically set up any installed servers:
+      require("mason-lspconfig").setup_handlers({
+        function(server) 
+          require("lspconfig")[server].setup({})
+        end
+      })
+    end,
+  },
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.diagnostics.ruff,
+          null_ls.builtins.diagnostics.mypy,
+          null_ls.builtins.diagnostics.pycodestyle,
+        },
+      })
+    end,
+  },
+
+  ------------------------------------------------------------------------------
+  -- REPLACED: vim-airline => nvim-lualine/lualine.nvim (modern statusline)
+  -- Usage: :help lualine
+  ------------------------------------------------------------------------------
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" }, -- icons
+    config = function()
+      require("lualine").setup({
+        options = {
+          theme = "tokyonight", -- matches your old preference 
+          icons_enabled = true,
+        },
+      })
     end
   },
+
+  ------------------------------------------------------------------------------
+  -- REPLACED: scrooloose/nerdtree => nvim-tree.lua (modern file explorer)
+  -- Usage: :NvimTreeToggle
+  ------------------------------------------------------------------------------
   {
-    "vim-airline/vim-airline-themes",
-    dependencies = { "vim-airline/vim-airline" },
+    "nvim-tree/nvim-tree.lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("nvim-tree").setup()
+    end,
   },
 
-  -- vimtex for LaTeX
-  { "lervag/vimtex" },
+  ------------------------------------------------------------------------------
+  -- REPLACED: majutsushi/tagbar => simrat39/symbols-outline.nvim
+  ------------------------------------------------------------------------------
 
-  -- Fish syntax
-  { "dag/vim-fish" },
+  -- {
+  --   "preservim/tagbar",  -- The current official repo is 'preservim/tagbar'
+  --   config = function()
+  --      -- Optional: any specific config if needed
+  --   end,
+  -- },
+  {
+    "stevearc/aerial.nvim",
+    config = function()
+      -- A basic config that docks the outline on the right side,
+      -- similarly to Tagbar, and uses the same <C-W>t mapping if desired.
+      require("aerial").setup({
+        layout = {
+          -- Use "prefer_right" to open on the right side if available
+          default_direction = "prefer_right",
+          -- or you can explicitly force right side:
+          -- max_width = { 40, 0.2 },
+          -- width = nil,
+          min_width = 10,
+          placement = "edge", -- ensures it’s always at the far right
+        },
+        -- Put any other Aerial options here
+        -- e.g. filter_kind = { "Class", "Function", "Method" }, etc.
+      })
 
-  -- Tagbar
-  { "majutsushi/tagbar" },
+      -- Remap <C-W>t (your old Tagbar key) to toggle Aerial
+      vim.keymap.set("n", "<C-W>t", "<cmd>AerialToggle!<CR>")
+    end,
+  },
 
-  -- NERDTree
-  { "scrooloose/nerdtree" },
+  ------------------------------------------------------------------------------
+  -- REPLACED: mhinz/vim-signify => lewis6991/gitsigns.nvim
+  -- Usage: :help gitsigns
+  ------------------------------------------------------------------------------
+  {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require("gitsigns").setup()
+    end,
+  },
 
-  -- Devicons
-  { "ryanoasis/vim-devicons" },
+  ------------------------------------------------------------------------------
+  -- REPLACED: mhinz/vim-startify => goolord/alpha-nvim (modern start screen)
+  -- Usage: auto-shows on empty nvim or run :Alpha
+  ------------------------------------------------------------------------------
+  {
+    "goolord/alpha-nvim",
+    config = function()
+      local alpha = require("alpha")
+      local dashboard = require("alpha.themes.dashboard")
+      dashboard.section.header.val = {
+        "   Welcome to Neovim!",
+        "   Remember to be awesome today :)"
+      }
+      alpha.setup(dashboard.config)
+    end,
+  },
 
-  -- vim-signify
-  { "mhinz/vim-signify" },
+  ------------------------------------------------------------------------------
+  -- REPLACED: Yggdroot/indentLine => lukas-reineke/indent-blankline.nvim
+  -- Usage: :help indent-blankline
+  ------------------------------------------------------------------------------
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    -- Let Lazy know the main module is "ibl" now (Version 3)
+    main = "ibl", 
+    config = function()
+      require("ibl").setup({
+        indent = {
+          char = "│",  -- same custom character
+        },
+        scope = {
+          enabled = false, -- or true if you want outline highlighting
+        },
+      })
+    end
+  },
 
-  -- JSON
-  { "elzr/vim-json" },
 
-  -- Startify
-  { "mhinz/vim-startify" },
+  ------------------------------------------------------------------------------
+  -- REPLACED: tmhedberg/SimpylFold + Konfekt/FastFold => nvim-ufo 
+  -- (with nvim-treesitter for better folding)
+  -- Usage: :help nvim-ufo
+  ------------------------------------------------------------------------------
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        highlight = { enable = true },
+        indent    = { enable = true },
+      })
+    end,
+  },
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
+    config = function()
+      require("ufo").setup()
+      vim.o.foldcolumn = '1'
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+    end,
+  },
+  {
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup()
+    end,
+  },
 
-  -- Some color schemes
+  ------------------------------------------------------------------------------
+  -- Retaining some old color schemes:
+  ------------------------------------------------------------------------------
   { "rakr/vim-one" },
   { "folke/tokyonight.nvim" },
   { "catppuccin/nvim", name = "catppuccin" },
 
-  -- Indent guides
-  { "Yggdroot/indentLine" },
-
-  -- Python folding + fast folding
-  { "tmhedberg/SimpylFold" },
-  { "Konfekt/FastFold" },
-
-  -- telescope
-  { "nvim-lua/plenary.nvim" },
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
-
-  -- Obsidian plugin
-  { "epwalsh/obsidian.nvim" },
-
-  -- GitHub Copilot
-  { "github/copilot.vim" },
+  ------------------------------------------------------------------------------
+  -- The rest that remain relevant:
+  ------------------------------------------------------------------------------
+  { "lervag/vimtex" },                 -- LaTeX
+  { "dag/vim-fish" },                  -- Fish syntax
+  { "elzr/vim-json" },                 -- JSON syntax
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+  { "epwalsh/obsidian.nvim" },         -- Obsidian plugin
+  { "github/copilot.vim" },            -- GitHub Copilot
 })
 
---------------------------------------------------------------------------------
--- 4. Now set your colorscheme AFTER the plugins are available
---------------------------------------------------------------------------------
-vim.cmd("colorscheme catppuccin")
 
 --------------------------------------------------------------------------------
--- 5. Post-Plugin (Configs, Keymaps, Vars, etc.)
+-- [2] Basic Settings (replaces old :set commands)
 --------------------------------------------------------------------------------
+vim.cmd [[
+  " replicate your iab Ytag
+  iab Ytag <C-R>=strftime("%Y-%m-%d %T by Brian McFee <brian.mcfee@nyu.edu>")<CR>
+]]
 
--- Airline
-vim.g.airline_theme           = "catppuccin"
-vim.g.airline_powerline_fonts = 1
+local opt = vim.opt
+local g   = vim.g
 
--- IndentLine
-vim.g.indentLine_char              = "│"
-vim.g.indent_guides_start_level    = 2
+-- Outdated "nocompatible" is default in Neovim, no need.
+-- "filetype plugin indent on" also default in Neovim.
 
--- ALE
-vim.g.ale_virtualtext_cursor       = 0
-vim.g.ale_linters = {
-  python = { "ruff", "mypy", "pycodestyle" },
-}
+-- True color
+opt.termguicolors = true
+
+-- Various old settings in modern style:
+opt.background   = "dark"
+opt.spell        = true
+opt.path         = { "." }
+opt.report       = 0
+opt.showcmd      = true
+opt.showmatch    = true
+opt.showmode     = true
+opt.softtabstop  = 4
+opt.wrapmargin   = 1
+opt.comments     = "b:#,:%,fb:-,n:>,n:)"
+opt.shortmess    = "at"
+opt.smartindent  = true
+opt.magic        = true
+opt.autowrite    = false
+opt.backup       = false
+opt.writebackup  = false
+opt.encoding     = "utf-8"
+opt.incsearch    = true
+opt.autoindent   = true
+opt.backspace    = { "indent", "eol", "start" }
+opt.expandtab    = true
+opt.helpheight   = 0
+opt.hidden       = true
+opt.joinspaces   = true
+opt.laststatus   = 2
+opt.modeline     = false
+opt.number       = true
+opt.errorbells   = false
+opt.ignorecase   = false  -- your "noignorecase"
+opt.ruler        = true
+opt.shell        = "bash"
+opt.shiftwidth   = 4
+opt.suffixes     = { ".bak", ".swp" }
+opt.tabstop      = 4
+opt.title        = true
+opt.visualbell   = true
+opt.mouse        = "a"
+opt.foldmethod   = "indent"   -- though nvim-ufo might override
+g.airline_powerline_fonts = 1 -- if lualine supports powerline glyphs, we keep it
+g.vimtex_compiler_progname = "nvr"
+g.vimtex_quickfix_mode     = 0
+g.vimtex_view_method       = "zathura"
+g.tex_flavor               = "latex"
 
 -- Copilot
-vim.g.copilot_filetypes = {
+g.copilot_filetypes = {
   ["*"] = false,
   python     = true,
   c          = true,
@@ -183,18 +322,81 @@ vim.g.copilot_filetypes = {
   erlang     = true,
 }
 
--- vimtex
-vim.g.vimtex_compiler_progname = "nvr"
-vim.g.vimtex_quickfix_mode     = 0
-vim.g.vimtex_view_method       = "zathura"
-vim.g.tex_flavor               = "latex"
+--------------------------------------------------------------------------------
+-- [3] Keymaps (replacing your old `map` commands)
+--------------------------------------------------------------------------------
+vim.g.mapleader = ","
+
+vim.cmd [[
+" Direct translations from your old config:
+
+nmap Q gq
+vmap Q gq
+map K <C-V>
+noremap <C-^> <C-^>`"
+map :alias map
+map :which map
+
+cnoremap <C-A> <Home>
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+cnoremap <ESC>b <S-Left>
+cnoremap <ESC>f <S-Right>
+cnoremap <ESC><C-H> <C-W>
+
+" Some special key sequences
+map <ESC>[19~ :split<CR>
+map <ESC>[20~ :bp<CR>
+map <ESC>[23~ :bn<CR>
+map <ESC>[31~ :bd<CR>
+map <ESC>OA <Up>
+imap <ESC>OA <Up>
+map <ESC>[A <Up>
+imap <ESC>[A <Up>
+map <ESC>OB <Down>
+imap <ESC>OB <Down>
+map <ESC>[B <Down>
+imap <ESC>[B <Down>
+map <ESC>OC <Right>
+imap <ESC>OC <Right>
+map <ESC>[C <Right>
+imap <ESC>[C <Right>
+map <ESC>OD <Left>
+imap <ESC>OD <Left>
+map <ESC>[D <Left>
+imap <ESC>[D <Left>
+
+" nmap <C-W>t :TagbarToggle<CR>
+
+" Insert-changelog
+map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Cc <home>OCREATED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Cf <home>OFIXME:   <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Ct <home>OTODO:    <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Cx <home>OXXX:     <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+
+map <leader>Cs :!echo <cword> \| ispell -a <CR>
+map <leader>Cd :!dict <cword> <CR>
+map <leader>Cm :!man <cword> <CR>
+map <leader>Cp :!pydoc <cword> <CR>
+
+" ALE usage replaced by LSP diagnostics. If you want old keymaps:
+" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+" nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+nmap <silent> <C-k> <cmd>lua vim.diagnostic.goto_prev()<CR>
+nmap <silent> <C-j> <cmd>lua vim.diagnostic.goto_next()<CR>
+
+" NERDTree => nvim-tree
+map <C-n> :NvimTreeToggle<CR>
+]]
 
 --------------------------------------------------------------------------------
--- 6. Autocmds (migrating your old ones)
+-- [4] Autocommands (translated from your old config)
 --------------------------------------------------------------------------------
-local augroup = vim.api.nvim_create_augroup("UserAutocmds", { clear = true })
+local augroup = vim.api.nvim_create_augroup("UserAutoCmds", { clear = true })
 
--- For .tex, .txt => ensure no linebreak, wrap, conceal=0, etc.
+-- For .tex, .txt => replicate your old settings
 vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
   group = augroup,
   pattern = {"*.tex", "*.txt"},
@@ -207,12 +409,14 @@ vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
   end,
 })
 
--- JSON-related
+-- For .jams => set syntax=json
 vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
   group = augroup,
   pattern = "*.jams",
   command = "set syntax=json",
 })
+
+-- For .json => conceallevel=0
 vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
   group = augroup,
   pattern = "*.json",
@@ -221,76 +425,20 @@ vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
   end,
 })
 
--- Startify on empty invocation
-vim.api.nvim_create_autocmd("VimEnter", {
-  group = augroup,
-  callback = function()
-    if vim.fn.argc() == 0 then
-      vim.cmd("Startify")
-    end
-  end,
-})
+
+-- If you had custom highlight for IndentGuidesEven:
+vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#4a4a4a" })
+
 
 --------------------------------------------------------------------------------
--- 7. Keymaps (migrating your old mappings)
+-- [5] Set the colorscheme after plugins have loaded
 --------------------------------------------------------------------------------
-vim.cmd [[
-  nmap Q gq
-  vmap Q gq
-  map K <C-V>
-  noremap <C-^> <C-^>`"
-  map :alias map
-  map :which map
-  cnoremap <C-A> <Home>
-  cnoremap <C-F> <Right>
-  cnoremap <C-B> <Left>
-  cnoremap <ESC>b <S-Left>
-  cnoremap <ESC>f <S-Right>
-  cnoremap <ESC><C-H> <C-W>
-  map <ESC>[19~ :split<CR>
-  map <ESC>[20~ :bp<CR>
-  map <ESC>[23~ :bn<CR>
-  map <ESC>[31~ :bd<CR>
+local ok, _ = pcall(vim.cmd, "colorscheme tokyonight")
+if not ok then
+  vim.cmd("colorscheme default")
+end
 
-  " Arrow key fixes in some terminals
-  map <ESC>OA <Up>
-  imap <ESC>OA <Up>
-  map <ESC>[A <Up>
-  imap <ESC>[A <Up>
-  map <ESC>OB <Down>
-  imap <ESC>OB <Down>
-  map <ESC>[B <Down>
-  imap <ESC>[B <Down>
-  map <ESC>OC <Right>
-  imap <ESC>OC <Right>
-  map <ESC>[C <Right>
-  imap <ESC>[C <Right>
-  map <ESC>OD <Left>
-  imap <ESC>OD <Left>
-  map <ESC>[D <Left>
-  imap <ESC>[D <Left>
-
-  " Tagbar
-  nmap <C-W>t :TagbarToggle<CR>
-
-  let mapleader=","
-
-  " Insert-changelog mappings
-  map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-  map <leader>Cc <home>OCREATED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-  map <leader>Cf <home>OFIXME:   <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-  map <leader>Ct <home>OTODO:    <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-  map <leader>Cx <home>OXXX:     <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-
-  map <leader>Cs :!echo <cword> \| ispell -a <CR>
-  map <leader>Cd :!dict <cword> <CR>
-  map <leader>Cm :!man <cword> <CR>
-  map <leader>Cp :!pydoc <cword> <CR>
-
-  " ALE next/previous lint
-  nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-  nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
-  " NERDTree
-  map <C-n> :NERDTreeToggle<CR>
-]]
+--------------------------------------------------------------------------------
+-- [6] Force conceallevel=0 globally (like your old "set conceallevel=0")
+--------------------------------------------------------------------------------
+vim.opt.conceallevel = 0

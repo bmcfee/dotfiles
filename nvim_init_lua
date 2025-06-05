@@ -18,6 +18,15 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
+-- Define a custom lualine component for Copilot status
+local function copilot_status()
+  -- Safely try to call the Copilot API (it’s a Vimscript function)
+  local ok, status = pcall(vim.fn["copilot#Enabled"])
+  if not ok then
+    return ""
+  end
+  return status == 1 and " " or " "
+end
 
 --------------------------------------------------------------------------------
 -- [1] lazy.nvim Setup: Plugin Definitions
@@ -40,25 +49,25 @@ require("lazy").setup({
       require("mason-lspconfig").setup()
 
       -- Example: automatically set up any installed servers:
-      require("mason-lspconfig").setup_handlers({
-        function(server) 
-          require("lspconfig")[server].setup({})
-        end
-      })
+--      require("mason-lspconfig").setup_handlers({
+--        function(server) 
+--          require("lspconfig")[server].setup({})
+ --       end
+ --     })
     end,
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local null_ls = require("null-ls")
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.diagnostics.ruff,
-          null_ls.builtins.diagnostics.mypy,
-          null_ls.builtins.diagnostics.pycodestyle,
-        },
-      })
+--      null_ls.setup({
+--        sources = {
+--          null_ls.builtins.diagnostics.ruff,
+--          null_ls.builtins.diagnostics.mypy,
+--          null_ls.builtins.diagnostics.pycodestyle,
+--        },
+--      })
     end,
   },
 
@@ -74,6 +83,14 @@ require("lazy").setup({
         options = {
           theme = "tokyonight", -- matches your old preference 
           icons_enabled = true,
+        },
+        sections = {
+            lualine_a = { "mode" },
+            lualine_b = { "branch" },
+            lualine_c = { "filename" },
+            lualine_x = { copilot_status, "encoding", "fileformat", "filetype" },
+            lualine_y = { "progress" },
+            lualine_z = { "location" },
         },
       })
     end
@@ -290,7 +307,7 @@ g.tex_flavor               = "latex"
 
 -- Copilot
 g.copilot_filetypes = {
-  ["*"] = false,
+  ["*"] = true,
   python     = true,
   c          = true,
   cpp        = true,
@@ -320,6 +337,8 @@ g.copilot_filetypes = {
   fsharp     = true,
   elixir     = true,
   erlang     = true,
+  rst        = true,
+  tex        = false,
 }
 
 --------------------------------------------------------------------------------
@@ -390,6 +409,20 @@ nmap <silent> <C-j> <cmd>lua vim.diagnostic.goto_next()<CR>
 " NERDTree => nvim-tree
 map <C-n> :NvimTreeToggle<CR>
 ]]
+
+
+--------------------------------------------------------------------------------
+-- Add GitHub Copilot status (enabled/disabled) to lualine.nvim statusline
+--
+-- REQUIREMENTS:
+--   - You're using lualine.nvim for your statusline (already set up).
+--   - You have GitHub Copilot installed via 'github/copilot.vim'.
+--
+-- USAGE:
+--   1. Add the `copilot_status` component to your lualine config.
+--   2. The function checks the copilot status per buffer using Copilot API.
+--------------------------------------------------------------------------------
+
 
 --------------------------------------------------------------------------------
 -- [4] Autocommands (translated from your old config)

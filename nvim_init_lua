@@ -223,6 +223,25 @@ require("lazy").setup({
       require("Comment").setup()
     end,
   },
+  {
+    "petertriho/nvim-scrollbar",
+    event = "VeryLazy",
+    dependencies = {
+      "lewis6991/gitsigns.nvim", -- optional: enables git signs in scrollbar
+    },
+    config = function()
+      require("scrollbar").setup({
+        show = true,
+        set_highlights = true,
+        handlers = {
+          cursor = true,
+          diagnostic = true,
+          gitsigns = true,
+          search = true,
+        },
+      })
+    end,
+  },
 
   ------------------------------------------------------------------------------
   -- Retaining some old color schemes:
@@ -240,6 +259,18 @@ require("lazy").setup({
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
   { "epwalsh/obsidian.nvim" },         -- Obsidian plugin
   { "github/copilot.vim" },            -- GitHub Copilot
+  { "lewis6991/gitsigns.nvim" }, -- optional: enables git signs in scrollbar
+  { "kevinhwang91/nvim-hlslens" },
+  { "tadaa/vimade",
+    opts = {
+      -- Recipe can be any of 'default', 'minimalist', 'duo', and 'ripple'
+      -- Set animate = true to enable animations on any recipe.
+      -- See the docs for other config options.
+      recipe = {'duo', {animate=true}},
+      fadelevel = 0.33,
+--      tint = {fg={rgb={200,200,200}, intensity=1}},
+    }
+  },                   -- Vimade (modernized version of vimade)
 })
 
 

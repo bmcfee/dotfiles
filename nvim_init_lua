@@ -242,6 +242,39 @@ require("lazy").setup({
       })
     end,
   },
+  {
+    "echasnovski/mini.map",
+    version = false,
+    config = function()
+      local map = require("mini.map")
+      map.setup({
+        integrations = {
+          map.gen_integration.builtin_search(),
+          map.gen_integration.diagnostic(),
+          map.gen_integration.gitsigns(),
+        },
+        symbols = {
+          encode = map.gen_encode_symbols.dot("4x2"),
+        },
+        window = {
+          side = "right",
+          width = 8,
+          winblend = 75,
+          show_integration_count = false,
+        },
+      })
+
+      -- Automatically show minimap for certain filetypes
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "*" },
+        callback = function()
+          if vim.bo.buftype == "" and vim.fn.line("$") > 40 then
+            require("mini.map").open()
+          end
+        end,
+      })
+    end,
+  },
 
   ------------------------------------------------------------------------------
   -- Retaining some old color schemes:

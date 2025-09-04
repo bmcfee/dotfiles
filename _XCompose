@@ -101,3 +101,14 @@ include "%L"
 <Multi_key> <Y> <space>                : "Η"        U0397                # GREEK CAPITAL LETTER ΕΤΑ
 <Multi_key> <space> <Z>                : "Ζ"        U0396                # GREEK CAPITAL LETTER ZETA
 <Multi_key> <Z> <space>                : "Ζ"        U0396                # GREEK CAPITAL LETTER ZETA
+
+# Music notation
+<Multi_key> <b> <b>                    : "♭"        U266D                # MUSIC FLAT SIGN
+<Multi_key> <s> <s>                    : "♯"        U266F                # MUSIC SHARP SIGN
+<Multi_key> <n> <n>                    : "♮"        U266E                # MUSIC NATURAL SIGN
+# double-sharp sign
+<Multi_key> <s> <x>                    : "𝄪"        U1D12A               # MUSICAL SYMBOL DOUBLE SHARP
+<Multi_key> <x> <s>                    : "𝄪"        U1D12A               # MUSICAL SYMBOL DOUBLE SHARP
+# double-flat sign
+<Multi_key> <b> <x>                    : "𝄫"        U1D12B               # MUSICAL SYMBOL DOUBLE FLAT
+<Multi_key> <x> <b>                    : "𝄫"        U1D12B               # MUSICAL SYMBOL DOUBLE FLAT#

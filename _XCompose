@@ -112,3 +112,21 @@ include "%L"
 # double-flat sign
 <Multi_key> <b> <x>                    : "𝄫"        U1D12B               # MUSICAL SYMBOL DOUBLE FLAT
 <Multi_key> <x> <b>                    : "𝄫"        U1D12B               # MUSICAL SYMBOL DOUBLE FLAT#
+
+
+# ───── Macron (overline) U+0304 ─────
+<Multi_key> <minus>         : "\u0304"   # dead macron
+<Multi_key> <minus> <Any>   : "\u0304\1"
+
+# ───── Underline U+0332 ─────
+<Multi_key> <underscore>         : "\u0332"   # dead underline
+<Multi_key> <underscore> <Any>   : "\u0332\1"
+
+# ───── Circumflex U+0302 ─────
+<Multi_key> <asciicircum>         : "\u0302"   # dead circumflex
+<Multi_key> <asciicircum> <Any>   : "\u0302\1"
+
+# ───── Tilde U+0303 ─────
+<Multi_key> <asciitilde>         : "\u0303"   # dead tilde
+<Multi_key> <asciitilde> <Any>   : "\u0303\1"
+

@@ -18,53 +18,66 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
--- Define a custom lualine component for Copilot status
+
+-- OLD: Copilot status check using Vimscript function
+-- local function copilot_status()
+--   -- Safely try to call the Copilot API (it’s a Vimscript function)
+--   local ok, status = pcall(vim.fn["copilot#Enabled"])
+--   if not ok then
+--     return ""
+--   end
+--   return status == 1 and " " or " "
+-- end
+
+-- NEW: Copilot status check using zbirenbaum/copilot.lua API
 local function copilot_status()
-  -- Safely try to call the Copilot API (it’s a Vimscript function)
-  local ok, status = pcall(vim.fn["copilot#Enabled"])
+  local ok, client = pcall(require, "copilot.client")
   if not ok then
     return ""
   end
-  return status == 1 and " " or " "
+  if client.is_disabled() then
+    return " "
+  end
+  return " "
 end
 
--- Copilot
-vim.g.copilot_filetypes = {
-  ["*"] = true,
-  python     = true,
-  c          = true,
-  cpp        = true,
-  java       = true,
-  javascript = true,
-  typescript = true,
-  sh         = true,
-  bash       = true,
-  zsh        = true,
-  fish       = true,
-  go         = true,
-  rust       = true,
-  ruby       = true,
-  perl       = true,
-  php        = true,
-  lua        = true,
-  haskell    = true,
-  scala      = true,
-  swift      = true,
-  kotlin     = true,
-  r          = true,
-  julia      = true,
-  racket     = true,
-  clojure    = true,
-  scheme     = true,
-  ocaml      = true,
-  fsharp     = true,
-  elixir     = true,
-  erlang     = true,
-  rst        = true,
-  tex        = false,
-  txt        = false,
-  text       = false
-}
+-- OLD: Copilot global filetypes configuration
+-- vim.g.copilot_filetypes = {
+--   ["*"] = true,
+--   python     = true,
+--   c          = true,
+--   cpp        = true,
+--   java       = true,
+--   javascript = true,
+--   typescript = true,
+--   sh         = true,
+--   bash       = true,
+--   zsh        = true,
+--   fish       = true,
+--   go         = true,
+--   rust       = true,
+--   ruby       = true,
+--   perl       = true,
+--   php        = true,
+--   lua        = true,
+--   haskell    = true,
+--   scala      = true,
+--   swift      = true,
+--   kotlin     = true,
+--   r          = true,
+--   julia      = true,
+--   racket     = true,
+--   clojure    = true,
+--   scheme     = true,
+--   ocaml      = true,
+--   fsharp     = true,
+--   elixir     = true,
+--   erlang     = true,
+--   rst        = true,
+--   tex        = false,
+--   txt        = false,
+--   text       = false
+-- }
 
 
 --------------------------------------------------------------------------------
@@ -386,7 +399,65 @@ require("lazy").setup({
   { "elzr/vim-json" },                 -- JSON syntax
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
   { "epwalsh/obsidian.nvim" },         -- Obsidian plugin
-  { "github/copilot.vim" },            -- GitHub Copilot
+  -- OLD: { "github/copilot.vim" },            -- GitHub Copilot
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          keymap = {
+            accept = "<M-l>",
+            accept_word = false,
+            accept_line = false,
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-]>",
+          },
+        },
+        panel = { enabled = false },
+        filetypes = {
+          ["*"] = true,
+          python     = true,
+          c          = true,
+          cpp        = true,
+          java       = true,
+          javascript = true,
+          typescript = true,
+          sh         = true,
+          bash       = true,
+          zsh        = true,
+          fish       = true,
+          go         = true,
+          rust       = true,
+          ruby       = true,
+          perl       = true,
+          php        = true,
+          lua        = true,
+          haskell    = true,
+          scala      = true,
+          swift      = true,
+          kotlin     = true,
+          r          = true,
+          julia      = true,
+          racket     = true,
+          clojure    = true,
+          scheme     = true,
+          ocaml      = true,
+          fsharp     = true,
+          elixir     = true,
+          erlang     = true,
+          rst        = true,
+          tex        = false,
+          txt        = false,
+          text       = false,
+        },
+      })
+    end,
+  },
   { "kevinhwang91/nvim-hlslens" },
   { "tadaa/vimade",
     opts = {

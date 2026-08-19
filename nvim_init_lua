@@ -28,6 +28,45 @@ local function copilot_status()
   return status == 1 and " " or " "
 end
 
+-- Copilot
+vim.g.copilot_filetypes = {
+  ["*"] = true,
+  python     = true,
+  c          = true,
+  cpp        = true,
+  java       = true,
+  javascript = true,
+  typescript = true,
+  sh         = true,
+  bash       = true,
+  zsh        = true,
+  fish       = true,
+  go         = true,
+  rust       = true,
+  ruby       = true,
+  perl       = true,
+  php        = true,
+  lua        = true,
+  haskell    = true,
+  scala      = true,
+  swift      = true,
+  kotlin     = true,
+  r          = true,
+  julia      = true,
+  racket     = true,
+  clojure    = true,
+  scheme     = true,
+  ocaml      = true,
+  fsharp     = true,
+  elixir     = true,
+  erlang     = true,
+  rst        = true,
+  tex        = false,
+  txt        = false,
+  text       = false
+}
+
+
 --------------------------------------------------------------------------------
 -- [1] lazy.nvim Setup: Plugin Definitions
 --------------------------------------------------------------------------------
@@ -41,12 +80,24 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+        {"williamboman/mason.nvim", opts = {}},
+        {
+            "williamboman/mason-lspconfig.nvim",
+            opts = {
+                ensure_installed = {
+                    "lua_ls",
+                    "pyright",
+                    "ruff",
+                    "bashls",
+                },
+                automatic_enable = true,
+            },
+        },
     },
-    config = function()
-      require("mason").setup()
-      require("mason-lspconfig").setup()
+
+    --config = function()
+    --  require("mason").setup()
+    --  require("mason-lspconfig").setup()
 
       -- Example: automatically set up any installed servers:
 --      require("mason-lspconfig").setup_handlers({
@@ -54,6 +105,25 @@ require("lazy").setup({
 --          require("lspconfig")[server].setup({})
  --       end
  --     })
+    --end,
+        --
+    config = function()
+    -- Neovim 0.11+ / mason-lspconfig v2 style.
+    vim.lsp.config("lua_ls", {
+      settings = {
+        Lua = {
+          diagnostics = { globals = { "vim" } },
+        },
+      },
+    })
+
+    vim.diagnostic.config({
+      virtual_text = true,
+      signs = true,
+      underline = true,
+      update_in_insert = false,
+      severity_sort = true,
+    })
     end,
   },
   {
@@ -96,29 +166,6 @@ require("lazy").setup({
     end
   },
 
-  --------------
-  -- which-key.nvim (modern keybinding helper)
-    -- Usage: <leader>? to see buffer-local mappings
-    -- :help which-key
-    --
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    },
-    keys = {
-      {
-        "<leader>?",
-        function()
-          require("which-key").show({ global = false })
-        end,
-        desc = "Buffer Local Keymaps (which-key)",
-      },
-    },
-  },
   ------------------------------------------------------------------------------
   -- REPLACED: scrooloose/nerdtree => nvim-tree.lua (modern file explorer)
   -- Usage: :NvimTreeToggle
@@ -315,7 +362,6 @@ require("lazy").setup({
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
   { "epwalsh/obsidian.nvim" },         -- Obsidian plugin
   { "github/copilot.vim" },            -- GitHub Copilot
-  { "lewis6991/gitsigns.nvim" }, -- optional: enables git signs in scrollbar
   { "kevinhwang91/nvim-hlslens" },
   { "tadaa/vimade",
     opts = {
@@ -391,44 +437,6 @@ g.vimtex_compiler_progname = "nvr"
 g.vimtex_quickfix_mode     = 0
 g.vimtex_view_method       = "zathura"
 g.tex_flavor               = "latex"
-
--- Copilot
-g.copilot_filetypes = {
-  ["*"] = true,
-  python     = true,
-  c          = true,
-  cpp        = true,
-  java       = true,
-  javascript = true,
-  typescript = true,
-  sh         = true,
-  bash       = true,
-  zsh        = true,
-  fish       = true,
-  go         = true,
-  rust       = true,
-  ruby       = true,
-  perl       = true,
-  php        = true,
-  lua        = true,
-  haskell    = true,
-  scala      = true,
-  swift      = true,
-  kotlin     = true,
-  r          = true,
-  julia      = true,
-  racket     = true,
-  clojure    = true,
-  scheme     = true,
-  ocaml      = true,
-  fsharp     = true,
-  elixir     = true,
-  erlang     = true,
-  rst        = true,
-  tex        = false,
-  txt        = false,
-  text       = false
-}
 
 --------------------------------------------------------------------------------
 -- [3] Keymaps (replacing your old `map` commands)

@@ -28,6 +28,9 @@ set -x EDITOR "nvim"
 set -x FLSYM_CONDA  "\U0001F40D "
 
 # source ~/.local/share/icons-in-terminal/icons.fish
+if test -f ~/.github_token
+    set -gx GITHUB_TOKEN (cat ~/.github_token | string trim)
+end
 
 alias ca="conda activate"
 alias cda="conda deactivate"
@@ -40,3 +43,6 @@ if test -f /home/bmcfee/miniconda3/bin/conda
 end
 # <<< conda initialize <<<
 #
+
+# uv
+fish_add_path "/home/bmcfee/.local/bin"

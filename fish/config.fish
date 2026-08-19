@@ -1,48 +1,44 @@
-set fish_greeting ""
+# Global environment variables (needed by both interactive and non-interactive shells)
+ set -gx PKG_CONFIG_PATH $HOME/lib/pkgconfig
+ set -gx MAMBA_NO_BANNER 1
+ set -gx LIBROSA_CACHE_DIR /tmp/librosa_cache
+ set -gx LIBROSA_CACHE_LEVEL 10
+ set -gx TF_CPP_MIN_LOG_LEVEL 3
+ set -gx EDITOR "nvim"
+ set -gx FLSYM_CONDA "\U0001F40D "
 
-if set -q SSH_CLIENT
-    set USERHOST USERHOST
-else
-    set USERHOST 
-end
-set -x PKG_CONFIG_PATH $HOME/lib/pkgconfig
+ # Paths
+ fish_add_path "$HOME/.local/bin"
 
-set -x MAMBA_NO_BANNER 1
+ # Interactive session configurations
+ if status is-interactive
+     set fish_greeting ""
 
-#source $HOME/.config/fish/conf.d/dracula.fish
-#source $HOME/.config/fish/conf.d/bauhaus.fish
-source $HOME/.config/fish/themes/tokyonight_moon.fish
-#source $FLINE_PATH/themes/washed.fish
+     # Set USERHOST if in an SSH session
+     if set -q SSH_CLIENT
+         set USERHOST (whoami)@(prompt_hostname)
+     else
+         set USERHOST ""
+     end
 
-alias top=btop
-alias vim=nvim
-alias ls=lsd
-#alias ls="ls -F --color"
+     # Theme
+     source $HOME/.config/fish/themes/tokyonight_moon.fish
 
+     # Abbreviations (faster and cleaner than aliases)
+     abbr -a top btop
+     abbr -a vim nvim
+     abbr -a ls lsd
+     abbr -a ca "conda activate"
+     abbr -a cda "conda deactivate"
 
-set -x LIBROSA_CACHE_DIR /tmp/librosa_cache
-set -x LIBROSA_CACHE_LEVEL 10
+     # GitHub Token
+     if test -f ~/.github_token
+         set -gx GITHUB_TOKEN (cat ~/.github_token | string trim)
+     end
 
-set -x TF_CPP_MIN_LOG_LEVEL 3
-set -x EDITOR "nvim"
-set -x FLSYM_CONDA  "\U0001F40D "
-
-# source ~/.local/share/icons-in-terminal/icons.fish
-if test -f ~/.github_token
-    set -gx GITHUB_TOKEN (cat ~/.github_token | string trim)
-end
-
-alias ca="conda activate"
-alias cda="conda deactivate"
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if test -f /home/bmcfee/miniconda3/bin/conda
-    #    status is-interactive && eval /home/bmcfee/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-    #    status is-interactive && cda
-    status is-interactive && ca py13
-end
-# <<< conda initialize <<<
-#
-
-# uv
-fish_add_path "/home/bmcfee/.local/bin"
+     # Conda initialization
+     if test -f $HOME/miniconda3/bin/conda
+         eval $HOME/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+         conda activate py13
+     end
+ end

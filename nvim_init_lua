@@ -108,13 +108,38 @@ require("lazy").setup({
     --end,
         --
     config = function()
-    -- Neovim 0.11+ / mason-lspconfig v2 style.
-    vim.lsp.config("lua_ls", {
-      settings = {
-        Lua = {
-          diagnostics = { globals = { "vim" } },
-        },
-      },
+    -- OLD: Neovim 0.11+ / mason-lspconfig v2 style (only configured lua_ls and didn't start others)
+    -- vim.lsp.config("lua_ls", {
+    --   settings = {
+    --     Lua = {
+    --       diagnostics = { globals = { "vim" } },
+    --     },
+    --   },
+    -- })
+
+    -- NEW: Setup mason and mason-lspconfig handlers so all servers start
+    require("mason").setup()
+    require("mason-lspconfig").setup({
+      ensure_installed = {
+        "lua_ls",
+        "pyright",
+        "ruff",
+        "bashls",
+      }
+    })
+    require("mason-lspconfig").setup_handlers({
+      function(server_name)
+        require("lspconfig")[server_name].setup({})
+      end,
+      ["lua_ls"] = function()
+        require("lspconfig").lua_ls.setup({
+          settings = {
+            Lua = {
+              diagnostics = { globals = { "vim" } },
+            },
+          },
+        })
+      end,
     })
 
     vim.diagnostic.config({
@@ -485,7 +510,8 @@ imap <ESC>[D <Left>
 " nmap <C-W>t :TagbarToggle<CR>
 
 " Insert-changelog
-map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+" OLD: map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
+map <leader>Ch <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
 map <leader>Cc <home>OCREATED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
 map <leader>Cf <home>OFIXME:   <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
 map <leader>Ct <home>OTODO:    <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
@@ -557,7 +583,8 @@ vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
 
 
 -- If you had custom highlight for IndentGuidesEven:
-vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#4a4a4a" })
+-- OLD: vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#4a4a4a" })
+vim.api.nvim_set_hl(0, "IblIndent", { fg = "#4a4a4a" })
 
 
 --------------------------------------------------------------------------------

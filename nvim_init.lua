@@ -96,15 +96,15 @@ require("lazy").setup({
         {"williamboman/mason.nvim", opts = {}},
         {
             "williamboman/mason-lspconfig.nvim",
-            opts = {
-                ensure_installed = {
-                    "lua_ls",
-                    "pyright",
-                    "ruff",
-                    "bashls",
-                },
-                automatic_enable = true,
-            },
+--            opts = {
+--                ensure_installed = {
+--                    "lua_ls",
+--                    "pyright",
+--                    "ruff",
+--                    "bashls",
+--                },
+--                automatic_enable = true,
+--            },
         },
     },
 
@@ -169,13 +169,13 @@ require("lazy").setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local null_ls = require("null-ls")
---      null_ls.setup({
+      null_ls.setup({
 --        sources = {
 --          null_ls.builtins.diagnostics.ruff,
 --          null_ls.builtins.diagnostics.mypy,
 --          null_ls.builtins.diagnostics.pycodestyle,
 --        },
---      })
+      })
     end,
   },
 
@@ -544,10 +544,8 @@ vim.cmd [[
 
 nmap Q gq
 vmap Q gq
-map K <C-V>
+"map K <C-V>
 noremap <C-^> <C-^>`"
-map :alias map
-map :which map
 
 cnoremap <C-A> <Home>
 cnoremap <C-F> <Right>
@@ -669,4 +667,4 @@ end
 --------------------------------------------------------------------------------
 -- [6] Force conceallevel=0 globally (like your old "set conceallevel=0")
 --------------------------------------------------------------------------------
-vim.opt.conceallevel = 0
+-- vim.opt.conceallevel = 0

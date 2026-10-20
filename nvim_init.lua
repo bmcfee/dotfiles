@@ -243,14 +243,17 @@ require("lazy").setup({
   {
     "petertriho/nvim-scrollbar",
     event = "VeryLazy",
+    branch = "refactor/v2",
     dependencies = {
       "lewis6991/gitsigns.nvim", -- optional: enables git signs in scrollbar
     },
     config = function()
       require("scrollbar").setup({
-        show = true,
         set_highlights = true,
-        handlers = {
+        scrollbar = {
+            visibility = "all",
+        },
+        providers = {
           cursor = true,
           diagnostic = true,
           gitsigns = true,

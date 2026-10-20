@@ -275,7 +275,7 @@ require("lazy").setup({
         },
         window = {
           side = "right",
-          width = 10,
+          width = 12,
           winblend = 15,
           show_integration_count = true,
         },
@@ -563,6 +563,39 @@ vim.api.nvim_create_autocmd({"BufNewFile","BufRead"}, {
   end,
 })
 
+-- Automatically open MiniMap on normal editing buffers
+local minimap_ignore_ft = {
+  "NvimTree",
+  "aerial",
+  "alpha",
+  "help",
+  "lazy",
+  "mason",
+  "qf",
+  "TelescopePrompt",
+}
+
+vim.api.nvim_create_autocmd({ "BufEnter", "FileChangedShellPost" }, {
+  group = augroup,
+  callback = function()
+    if vim.tbl_contains(minimap_ignore_ft, vim.bo.filetype) or vim.bo.buftype ~= "" then
+      return
+    end
+    if _G.MiniMap and not MiniMap.current.is_open then
+      pcall(MiniMap.open)
+    end
+  end,
+})
+
+-- Refresh MiniMap on Aerial or window resize events to maintain correct placement
+vim.api.nvim_create_autocmd({ "VimResized" }, {
+  group = augroup,
+  callback = function()
+    if _G.MiniMap and MiniMap.current.is_open then
+      pcall(MiniMap.refresh)
+    end
+  end,
+})
 
 -- If you had custom highlight for IndentGuidesEven:
 -- OLD: vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#4a4a4a" })

@@ -258,12 +258,14 @@ require("lazy").setup({
           diagnostic = true,
           gitsigns = true,
           search = true,
+          mini_diff = true,
+          marks = true,
         },
       })
     end,
   },
   {
-    "echasnovski/mini.map",
+    "nvim-mini/mini.map",
     version = false,
     config = function()
       local map = require("mini.map")
@@ -275,6 +277,8 @@ require("lazy").setup({
         },
         symbols = {
           encode = map.gen_encode_symbols.dot("4x2"),
+          scroll_line = '',
+          scroll_view = '',
         },
         window = {
           side = "right",

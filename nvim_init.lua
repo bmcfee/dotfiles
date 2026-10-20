@@ -259,6 +259,29 @@ require("lazy").setup({
       })
     end,
   },
+  {
+    "echasnovski/mini.map",
+    version = false,
+    config = function()
+      local map = require("mini.map")
+      map.setup({
+        integrations = {
+          map.gen_integration.builtin_search(),
+          map.gen_integration.gitsigns(),
+          map.gen_integration.diagnostic(),
+        },
+        symbols = {
+          encode = map.gen_encode_symbols.dot("4x2"),
+        },
+        window = {
+          side = "right",
+          width = 10,
+          winblend = 15,
+          show_integration_count = true,
+        },
+      })
+    end,
+  },
 
   ------------------------------------------------------------------------------
   -- Retaining some old color schemes:
@@ -422,6 +445,12 @@ g.tex_flavor               = "latex"
 -- [3] Keymaps (replacing your old `map` commands)
 --------------------------------------------------------------------------------
 vim.g.mapleader = ","
+
+vim.keymap.set("n", "<leader>mc", function() MiniMap.close() end, { desc = "Close MiniMap" })
+vim.keymap.set("n", "<leader>mf", function() MiniMap.toggle_focus() end, { desc = "Focus MiniMap" })
+vim.keymap.set("n", "<leader>mo", function() MiniMap.open() end, { desc = "Open MiniMap" })
+vim.keymap.set("n", "<leader>mr", function() MiniMap.refresh() end, { desc = "Refresh MiniMap" })
+vim.keymap.set("n", "<leader>mt", function() MiniMap.toggle() end, { desc = "Toggle MiniMap" })
 
 vim.cmd [[
 " Direct translations from your old config:

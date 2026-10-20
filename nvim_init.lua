@@ -19,16 +19,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- OLD: Copilot status check using Vimscript function
--- local function copilot_status()
---   -- Safely try to call the Copilot API (it’s a Vimscript function)
---   local ok, status = pcall(vim.fn["copilot#Enabled"])
---   if not ok then
---     return ""
---   end
---   return status == 1 and " " or " "
--- end
-
 -- NEW: Copilot status check using zbirenbaum/copilot.lua API
 local function copilot_status()
   local ok, client = pcall(require, "copilot.client")
@@ -40,45 +30,6 @@ local function copilot_status()
   end
   return " "
 end
-
--- OLD: Copilot global filetypes configuration
--- vim.g.copilot_filetypes = {
---   ["*"] = true,
---   python     = true,
---   c          = true,
---   cpp        = true,
---   java       = true,
---   javascript = true,
---   typescript = true,
---   sh         = true,
---   bash       = true,
---   zsh        = true,
---   fish       = true,
---   go         = true,
---   rust       = true,
---   ruby       = true,
---   perl       = true,
---   php        = true,
---   lua        = true,
---   haskell    = true,
---   scala      = true,
---   swift      = true,
---   kotlin     = true,
---   r          = true,
---   julia      = true,
---   racket     = true,
---   clojure    = true,
---   scheme     = true,
---   ocaml      = true,
---   fsharp     = true,
---   elixir     = true,
---   erlang     = true,
---   rst        = true,
---   tex        = false,
---   txt        = false,
---   text       = false
--- }
-
 
 --------------------------------------------------------------------------------
 -- [1] lazy.nvim Setup: Plugin Definitions
@@ -96,41 +47,11 @@ require("lazy").setup({
         {"williamboman/mason.nvim", opts = {}},
         {
             "williamboman/mason-lspconfig.nvim",
---            opts = {
---                ensure_installed = {
---                    "lua_ls",
---                    "pyright",
---                    "ruff",
---                    "bashls",
---                },
---                automatic_enable = true,
---            },
         },
     },
 
-    --config = function()
-    --  require("mason").setup()
-    --  require("mason-lspconfig").setup()
-
-      -- Example: automatically set up any installed servers:
---      require("mason-lspconfig").setup_handlers({
---        function(server) 
---          require("lspconfig")[server].setup({})
- --       end
- --     })
-    --end,
-        --
     config = function()
-    -- OLD: Neovim 0.11+ / mason-lspconfig v2 style (only configured lua_ls and didn't start others)
-    -- vim.lsp.config("lua_ls", {
-    --   settings = {
-    --     Lua = {
-    --       diagnostics = { globals = { "vim" } },
-    --     },
-    --   },
-    -- })
 
-    -- NEW: Setup mason and mason-lspconfig handlers so all servers start
     require("mason").setup()
     require("mason-lspconfig").setup({
       ensure_installed = {
@@ -169,13 +90,7 @@ require("lazy").setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local null_ls = require("null-ls")
-      null_ls.setup({
---        sources = {
---          null_ls.builtins.diagnostics.ruff,
---          null_ls.builtins.diagnostics.mypy,
---          null_ls.builtins.diagnostics.pycodestyle,
---        },
-      })
+      null_ls.setup({ })
     end,
   },
 
@@ -220,12 +135,6 @@ require("lazy").setup({
   -- REPLACED: majutsushi/tagbar => simrat39/symbols-outline.nvim
   ------------------------------------------------------------------------------
 
-  -- {
-  --   "preservim/tagbar",  -- The current official repo is 'preservim/tagbar'
-  --   config = function()
-  --      -- Optional: any specific config if needed
-  --   end,
-  -- },
   {
     "stevearc/aerial.nvim",
     config = function()
@@ -350,39 +259,6 @@ require("lazy").setup({
       })
     end,
   },
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
   ------------------------------------------------------------------------------
   -- Retaining some old color schemes:
@@ -399,7 +275,6 @@ require("lazy").setup({
   { "elzr/vim-json" },                 -- JSON syntax
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
   { "epwalsh/obsidian.nvim" },         -- Obsidian plugin
-  -- OLD: { "github/copilot.vim" },            -- GitHub Copilot
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -408,7 +283,7 @@ require("lazy").setup({
       require("copilot").setup({
         suggestion = {
           enabled = true,
-          auto_trigger = true,
+          auto_trigger = false,
           keymap = {
             accept = "<M-l>",
             accept_word = false,
@@ -469,6 +344,15 @@ require("lazy").setup({
 --      tint = {fg={rgb={200,200,200}, intensity=1}},
     }
   },                   -- Vimade (modernized version of vimade)
+  {
+    "andythigpen/nvim-coverage",
+    version = "*",
+    config = function()
+      require("coverage").setup({
+        auto_reload = true,
+      })
+    end,
+  },
 })
 
 

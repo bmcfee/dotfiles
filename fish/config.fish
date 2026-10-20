@@ -5,7 +5,7 @@
  set -gx LIBROSA_CACHE_LEVEL 10
  set -gx TF_CPP_MIN_LOG_LEVEL 3
  set -gx EDITOR "nvim"
- set -gx FLSYM_CONDA "\U0001F40D "
+ # set -gx FLSYM_CONDA "\U0001F40D "
 
  # Paths
  fish_add_path "$HOME/.local/bin"
@@ -38,7 +38,7 @@
 
      # Conda initialization
      if test -f $HOME/miniconda3/bin/conda
-         eval $HOME/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+         #eval $HOME/miniconda3/bin/conda "shell.fish" "hook" $argv | source
          conda activate py13
      end
  end

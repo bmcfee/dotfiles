@@ -407,6 +407,12 @@ require("lazy").setup({
     config = function()
       require("coverage").setup({
         auto_reload = true,
+        signs = {
+            -- use your own highlight groups or text markers
+            covered = { hl = "CoverageCovered", text = "█" },
+            partial = { hl = "CoveragePartial", text = "▛" },
+            uncovered = { hl = "CoverageUncovered", text = "⬚" },
+        },
       })
     end,
   },

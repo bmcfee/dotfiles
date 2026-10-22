@@ -264,31 +264,58 @@ require("lazy").setup({
       })
     end,
   },
-  {
-    "nvim-mini/mini.map",
-    version = false,
-    config = function()
-      local map = require("mini.map")
-      map.setup({
-        integrations = {
-          map.gen_integration.builtin_search(),
-          map.gen_integration.gitsigns(),
-          map.gen_integration.diagnostic(),
-        },
-        symbols = {
-          encode = map.gen_encode_symbols.dot("4x2"),
-          scroll_line = '',
-          scroll_view = '',
-        },
-        window = {
-          side = "right",
-          width = 12,
-          winblend = 15,
-          show_integration_count = true,
-        },
-      })
-    end,
-  },
+  --{
+  --  "nvim-mini/mini.map",
+  --  version = false,
+  --  config = function()
+  --    local map = require("mini.map")
+  --    map.setup({
+  --      integrations = {
+  --        map.gen_integration.builtin_search(),
+  --        map.gen_integration.gitsigns(),
+  --        map.gen_integration.diagnostic(),
+  --      },
+  --      symbols = {
+  --        encode = map.gen_encode_symbols.dot("4x2"),
+  --        scroll_line = '',
+  --        scroll_view = '',
+  --      },
+  --      window = {
+  --        side = "right",
+  --        width = 12,
+  --        winblend = 15,
+  --        show_integration_count = true,
+  --      },
+  --    })
+  --  end,
+  --},
+    {
+	  "Isrothy/neominimap.nvim",
+	  version = "v3.*.*",
+	  lazy = false,
+	  init = function()
+	    vim.opt.wrap = true
+	    vim.g.neominimap = {
+	      auto_enable = true,
+	      layout = "split", -- "split" reserves physical columns; "float" overlays
+	      split = {
+		minimap_width = 14,
+		direction = "right",
+		close_if_last_window = true,
+	      },
+	      exclude_filetypes = {
+		"NvimTree",
+		"aerial",
+		"alpha",
+		"help",
+		"lazy",
+		"mason",
+		"qf",
+		"TelescopePrompt",
+	      },
+	  }
+	  end,
+    },
 
   ------------------------------------------------------------------------------
   -- Retaining some old color schemes:
@@ -453,11 +480,17 @@ g.tex_flavor               = "latex"
 --------------------------------------------------------------------------------
 vim.g.mapleader = ","
 
-vim.keymap.set("n", "<leader>mc", function() MiniMap.close() end, { desc = "Close MiniMap" })
-vim.keymap.set("n", "<leader>mf", function() MiniMap.toggle_focus() end, { desc = "Focus MiniMap" })
-vim.keymap.set("n", "<leader>mo", function() MiniMap.open() end, { desc = "Open MiniMap" })
-vim.keymap.set("n", "<leader>mr", function() MiniMap.refresh() end, { desc = "Refresh MiniMap" })
-vim.keymap.set("n", "<leader>mt", function() MiniMap.toggle() end, { desc = "Toggle MiniMap" })
+--vim.keymap.set("n", "<leader>mc", function() MiniMap.close() end, { desc = "Close MiniMap" })
+--vim.keymap.set("n", "<leader>mf", function() MiniMap.toggle_focus() end, { desc = "Focus MiniMap" })
+--vim.keymap.set("n", "<leader>mo", function() MiniMap.open() end, { desc = "Open MiniMap" })
+--vim.keymap.set("n", "<leader>mr", function() MiniMap.refresh() end, { desc = "Refresh MiniMap" })
+--vim.keymap.set("n", "<leader>mt", function() MiniMap.toggle() end, { desc = "Toggle MiniMap" })
+
+vim.keymap.set("n", "<leader>mc", "<cmd>Neominimap Disable<CR>", { desc = "Close Neominimap" })
+vim.keymap.set("n", "<leader>mf", "<cmd>Neominimap ToggleFocus<CR>", { desc = "Focus Neominimap" })
+vim.keymap.set("n", "<leader>mo", "<cmd>Neominimap Enable<CR>", { desc = "Open Neominimap" })
+vim.keymap.set("n", "<leader>mr", "<cmd>Neominimap Refresh<CR>", { desc = "Refresh Neominimap" })
+vim.keymap.set("n", "<leader>mt", "<cmd>Neominimap Toggle<CR>", { desc = "Toggle Neominimap" })
 
 vim.cmd [[
 " Direct translations from your old config:
@@ -500,16 +533,8 @@ imap <ESC>[D <Left>
 
 " Insert-changelog
 " OLD: map <leader>Cm <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-map <leader>Ch <home>OCHANGED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-map <leader>Cc <home>OCREATED: <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-map <leader>Cf <home>OFIXME:   <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-map <leader>Ct <home>OTODO:    <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-map <leader>Cx <home>OXXX:     <ESC>CYtag<ESC>,c<space>o <ESC><C-C>o<ESC>k<end>gela
-
 map <leader>Cs :!echo <cword> \| ispell -a <CR>
 map <leader>Cd :!dict <cword> <CR>
-map <leader>Cm :!man <cword> <CR>
-map <leader>Cp :!pydoc <cword> <CR>
 
 " ALE usage replaced by LSP diagnostics. If you want old keymaps:
 " nmap <silent> <C-k> <Plug>(ale_previous_wrap)
@@ -521,6 +546,53 @@ nmap <silent> <C-j> <cmd>lua vim.diagnostic.goto_next()<CR>
 " NERDTree => nvim-tree
 map <C-n> :NvimTreeToggle<CR>
 ]]
+
+local function insert_tagged_comment(label)
+  -- 1. Get the linewise comment string for the current filetype
+  local cs = vim.bo.commentstring
+  local ok, ft = pcall(require, "Comment.ft")
+  if ok and ft.get then
+    cs = ft.get(vim.bo.filetype, 1) or cs
+  end
+  if not cs or cs == "" or not cs:find("%%s") then
+    cs = "# %s"
+  end
+
+  -- Extract prefix/suffix and ensure trailing space on prefix
+  local prefix, suffix = cs:match("^(.-)%%s(.-)$")
+  if prefix ~= "" and not prefix:match("%s$") then
+    prefix = prefix .. " "
+  end
+
+  -- 2. Format header and continuation line
+  local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local indent = vim.api.nvim_get_current_line():match("^%s*") or ""
+  local timestamp = os.date("%Y-%m-%d %H:%M:%S") .. " by Brian McFee <brian.mcfee@nyu.edu>"
+
+  local line1 = indent .. prefix .. string.format("%-8s %s", label .. ":", timestamp) .. suffix
+  local line2 = indent .. prefix .. suffix
+
+  -- 3. Insert both lines above the current line
+  vim.api.nvim_buf_set_lines(0, row, row, false, { line1, line2 })
+
+  -- 4. Position cursor on the second line right after the comment prefix and enter Insert mode
+  local col = #indent + #prefix
+  vim.api.nvim_win_set_cursor(0, { row + 2, col })
+  if suffix == "" then
+    vim.cmd("startinsert!")
+  else
+    vim.cmd("startinsert")
+  end
+end
+
+vim.keymap.set("n", "<leader>Ch", function() insert_tagged_comment("CHANGED") end, { desc = "Insert CHANGED tag" })
+vim.keymap.set("n", "<leader>Cc", function() insert_tagged_comment("CREATED") end, { desc = "Insert CREATED tag" })
+vim.keymap.set("n", "<leader>Cf", function() insert_tagged_comment("FIXME") end,   { desc = "Insert FIXME tag" })
+vim.keymap.set("n", "<leader>Ct", function() insert_tagged_comment("TODO") end,    { desc = "Insert TODO tag" })
+vim.keymap.set("n", "<leader>Cx", function() insert_tagged_comment("XXX") end,     { desc = "Insert XXX tag" })
+
+vim.keymap.set("n", "<leader>c<space>", "<Plug>(comment_toggle_linewise_current)", { desc = "Toggle comment line" })
+vim.keymap.set("x", "<leader>c<space>", "<Plug>(comment_toggle_linewise_visual)", { desc = "Toggle comment selection" })
 
 
 --------------------------------------------------------------------------------
